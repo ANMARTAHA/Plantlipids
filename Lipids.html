@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — Lipids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#efe7d8;
+    --bg-deep:#e6dcc7;
+    --surface:#faf6ec;
+    --surface-alt:#f1e9d6;
+    --line:#d9cdae;
+    --ink:#2b2620;
+    --ink-soft:#655c4c;
+    --olive:#6c7a4c;
+    --olive-dark:#4b5636;
+    --clay:#b1573b;
+    --clay-dark:#8a4029;
+    --honey:#c2922f;
+    --honey-soft:#eadfb9;
+    --bad:#a5493a;
+    --good:#5c7a45;
+    --radius-s:6px;
+    --radius-m:12px;
+    --radius-l:22px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+  }
+  ::selection{background:var(--honey-soft);}
+
+  /* ---------- layout shell ---------- */
+  .shell{
+    display:flex;
+    min-height:100vh;
+  }
+  .rail{
+    width:236px;
+    flex:none;
+    background:var(--olive-dark);
+    color:#f2ecdc;
+    display:flex;
+    flex-direction:column;
+    padding:28px 20px;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    margin-bottom:34px;
+  }
+  .brand .mark{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--honey), var(--clay) 72%);
+    margin-bottom:10px;
+    box-shadow:0 0 0 3px rgba(255,255,255,0.08);
+  }
+  .brand h1{
+    font-size:1.5rem;
+    color:#f7f2e2;
+    letter-spacing:0.01em;
+  }
+  .brand p{
+    margin:4px 0 0;
+    font-size:0.82rem;
+    color:#cdd3b6;
+  }
+  nav.tabs{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex:1;
+  }
+  .tab-btn{
+    text-align:left;
+    background:none;
+    border:none;
+    color:#e7e2cd;
+    font-family:'Source Sans 3', sans-serif;
+    font-size:0.98rem;
+    font-weight:600;
+    padding:11px 14px;
+    border-radius:var(--radius-s);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .tab-btn .num{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:0.82rem;
+    opacity:0.6;
+    width:16px;
+  }
+  .tab-btn:hover{background:rgba(255,255,255,0.08);}
+  .tab-btn.active{
+    background:var(--honey);
+    color:#3a2e10;
+  }
+  .tab-btn.active .num{opacity:0.55;}
+  .rail-foot{
+    margin-top:24px;
+    padding-top:16px;
+    border-top:1px solid rgba(255,255,255,0.14);
+    font-size:0.74rem;
+    color:#b9c0a1;
+    line-height:1.6;
+  }
+
+  main.stage{
+    flex:1;
+    padding:38px 46px 64px;
+    max-width:1180px;
+  }
+  section.panel{display:none;}
+  section.panel.active{display:block; animation:rise 0.35s ease;}
+  @keyframes rise{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .panel-head{
+    margin-bottom:26px;
+    max-width:640px;
+  }
+  .panel-head .eyebrow{
+    color:var(--clay-dark);
+    font-weight:600;
+    font-size:0.86rem;
+    margin-bottom:6px;
+  }
+  .panel-head h2{
+    font-size:2.1rem;
+    line-height:1.15;
+  }
+  .panel-head p{
+    color:var(--ink-soft);
+    margin-top:10px;
+    font-size:1rem;
+  }
+
+  /* ---------- Overview ---------- */
+  .rule-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(270px,1fr));
+    gap:16px;
+  }
+  .rule-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:18px 20px;
+    border-left:4px solid var(--olive);
+  }
+  .rule-card.clay{border-left-color:var(--clay);}
+  .rule-card.honey{border-left-color:var(--honey);}
+  .rule-card h3{
+    font-size:1.08rem;
+    margin-bottom:8px;
+  }
+  .rule-card ul{
+    margin:0;
+    padding-left:18px;
+    color:var(--ink-soft);
+    font-size:0.93rem;
+  }
+  .rule-card li{margin-bottom:5px;}
+  .rule-card li:last-child{margin-bottom:0;}
+
+  /* ---------- Diagrams ---------- */
+  .diagram-block{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-l);
+    padding:26px 28px;
+    margin-bottom:26px;
+  }
+  .diagram-block h3{
+    font-size:1.2rem;
+    margin-bottom:4px;
+  }
+  .diagram-block .sub{
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    margin-bottom:18px;
+  }
+  .flow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .flow-col{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .flow-node{
+    border:1.5px solid var(--olive);
+    background:var(--surface-alt);
+    color:var(--ink);
+    font-weight:600;
+    font-size:0.88rem;
+    padding:10px 14px;
+    border-radius:var(--radius-s);
+    cursor:pointer;
+    text-align:center;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .flow-node:hover{transform:translateY(-2px); box-shadow:0 4px 10px rgba(75,86,54,0.18);}
+  .flow-node.selected{background:var(--olive); color:#fff; border-color:var(--olive-dark);}
+  .flow-node.clay{border-color:var(--clay);}
+  .flow-node.clay.selected{background:var(--clay); border-color:var(--clay-dark);}
+  .flow-arrow{
+    font-family:'Fraunces', serif;
+    font-size:1.3rem;
+    color:var(--ink-soft);
+  }
+  .flow-branch{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding-left:6px;
+    border-left:2px dashed var(--line);
+  }
+  .flow-detail{
+    margin-top:16px;
+    background:var(--surface-alt);
+    border-radius:var(--radius-s);
+    padding:14px 16px;
+    font-size:0.92rem;
+    color:var(--ink);
+    min-height:24px;
+  }
+  .flow-detail strong{color:var(--olive-dark);}
+
+  .toggle-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .toggle-btn{
+    border:1.5px solid var(--olive);
+    background:none;
+    color:var(--olive-dark);
+    font-weight:600;
+    font-size:0.88rem;
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .toggle-btn.active{background:var(--olive); color:#fff;}
+  .chain-wrap{
+    display:flex;
+    gap:24px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .chain-wrap svg{
+    background:var(--surface-alt);
+    border-radius:var(--radius-m);
+    flex:none;
+  }
+  .chain-note{
+    max-width:280px;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+  .chain-note strong{color:var(--ink);}
+
+  .wax-row{
+    display:flex;
+    align-items:stretch;
+    gap:0;
+    flex-wrap:wrap;
+  }
+  .wax-part{
+    flex:1;
+    min-width:160px;
+    padding:16px 18px;
+    cursor:pointer;
+    border:1.5px solid var(--line);
+    text-align:center;
+    font-weight:600;
+    font-size:0.94rem;
+    transition:background .15s ease;
+  }
+  .wax-part:first-child{border-radius:var(--radius-s) 0 0 var(--radius-s);}
+  .wax-part:last-child{border-radius:0 var(--radius-s) var(--radius-s) 0;}
+  .wax-part.fa{background:var(--honey-soft); color:var(--clay-dark);}
+  .wax-part.link{flex:0 0 90px; background:var(--olive); color:#fff; border-color:var(--olive);}
+  .wax-part.alc{background:#e4e9db; color:var(--olive-dark);}
+  .wax-part:hover{filter:brightness(0.96);}
+  .wax-detail{
+    margin-top:14px;
+    background:var(--surface-alt);
+    border-radius:var(--radius-s);
+    padding:14px 16px;
+    font-size:0.92rem;
+  }
+
+  table.cmp{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.94rem;
+  }
+  table.cmp th{
+    text-align:left;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    padding:10px 12px;
+    border-bottom:2px solid var(--olive);
+    color:var(--olive-dark);
+  }
+  table.cmp td{
+    padding:12px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  table.cmp tr.data-row{cursor:pointer;}
+  table.cmp tr.data-row:hover td{background:var(--surface-alt);}
+  tr.detail-row td{
+    background:var(--surface-alt);
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    display:none;
+    padding:6px 12px 14px;
+  }
+  tr.detail-row.open td{display:table-cell;}
+
+  /* ---------- Mind map ---------- */
+  .map-wrap{
+    display:flex;
+    gap:28px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .map-circle{
+    position:relative;
+    width:520px;
+    max-width:100%;
+    aspect-ratio:1/1;
+    flex:none;
+  }
+  .map-circle svg{position:absolute; inset:0; width:100%; height:100%;}
+  .map-hub{
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    width:112px; height:112px;
+    border-radius:50%;
+    background:radial-gradient(circle at 34% 28%, var(--honey), var(--clay) 78%);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.05rem;
+    text-align:center;
+    box-shadow:0 6px 18px rgba(138,64,41,0.3);
+    z-index:2;
+  }
+  .map-node{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    background:var(--surface);
+    border:1.5px solid var(--olive);
+    color:var(--olive-dark);
+    font-weight:600;
+    font-size:0.78rem;
+    padding:8px 11px;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+    z-index:2;
+    transition:background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .map-node:hover{transform:translate(-50%,-50%) scale(1.05);}
+  .map-node.active{background:var(--olive); color:#fff;}
+  .map-panel{
+    flex:1;
+    min-width:260px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-l);
+    padding:24px 26px;
+    min-height:260px;
+  }
+  .map-panel h3{
+    font-size:1.15rem;
+    color:var(--clay-dark);
+    margin-bottom:10px;
+  }
+  .map-panel p{
+    color:var(--ink);
+    font-size:0.96rem;
+    margin:0;
+  }
+  .map-panel .hint{color:var(--ink-soft); font-style:italic;}
+
+  /* ---------- Flashcards ---------- */
+  .fc-controls{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    align-items:center;
+  }
+  .fc-filter{
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    color:var(--ink-soft);
+    font-size:0.84rem;
+    font-weight:600;
+    padding:6px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .fc-filter.active{background:var(--olive); border-color:var(--olive); color:#fff;}
+  .fc-shuffle{
+    margin-left:auto;
+    border:none;
+    background:var(--clay);
+    color:#fff;
+    font-weight:600;
+    font-size:0.86rem;
+    padding:8px 18px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .fc-count{font-size:0.84rem; color:var(--ink-soft);}
+  .level-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+    align-items:center;
+  }
+  .level-row .level-label{
+    font-size:0.8rem;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-right:2px;
+  }
+  .level-btn{
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    color:var(--ink-soft);
+    font-size:0.84rem;
+    font-weight:700;
+    padding:6px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .level-btn .lvl-count{font-weight:600; opacity:0.75; margin-left:4px;}
+  .level-btn[data-level="Easy"].active{background:var(--good); border-color:var(--good); color:#fff;}
+  .level-btn[data-level="Medium"].active{background:var(--honey); border-color:var(--honey); color:#3a2e10;}
+  .level-btn[data-level="Hard"].active{background:var(--bad); border-color:var(--bad); color:#fff;}
+  .fc-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+    gap:16px;
+  }
+  .fc-card{
+    perspective:1200px;
+    height:150px;
+    cursor:pointer;
+  }
+  .fc-inner{
+    position:relative;
+    width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition:transform 0.5s cubic-bezier(.4,.2,.2,1);
+  }
+  .fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:var(--radius-m);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    border:1.5px solid var(--line);
+  }
+  .fc-front{background:var(--surface); }
+  .fc-front .tag{
+    font-size:0.68rem;
+    text-transform:none;
+    color:var(--clay-dark);
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .fc-front h4{font-size:1rem; line-height:1.3;}
+  .fc-back{
+    background:var(--olive-dark);
+    color:#f2ecdc;
+    transform:rotateY(180deg);
+    font-size:0.88rem;
+    line-height:1.45;
+  }
+  .fc-hint{
+    position:absolute; bottom:8px; right:12px;
+    font-size:0.68rem; color:var(--ink-soft); opacity:0.6;
+  }
+
+  /* ---------- Quiz ---------- */
+  .quiz-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .quiz-progress{
+    flex:1;
+    min-width:180px;
+    height:8px;
+    background:var(--surface-alt);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .quiz-progress-fill{
+    height:100%;
+    background:var(--clay);
+    width:0%;
+    transition:width .3s ease;
+  }
+  .quiz-score{
+    font-weight:600;
+    font-size:0.9rem;
+    color:var(--olive-dark);
+  }
+  .quiz-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-l);
+    padding:30px 32px;
+    max-width:700px;
+  }
+  .quiz-q-num{
+    font-size:0.82rem;
+    color:var(--clay-dark);
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .quiz-q{
+    font-family:'Fraunces', serif;
+    font-size:1.28rem;
+    font-weight:600;
+    margin-bottom:20px;
+    line-height:1.35;
+  }
+  .quiz-options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .quiz-opt{
+    text-align:left;
+    border:1.5px solid var(--line);
+    background:var(--surface-alt);
+    padding:12px 16px;
+    border-radius:var(--radius-s);
+    font-size:0.95rem;
+    cursor:pointer;
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink);
+    transition:background .12s ease, border-color .12s ease;
+  }
+  .quiz-opt:hover{border-color:var(--olive);}
+  .quiz-opt.correct{background:#dfe8d3; border-color:var(--good); color:var(--olive-dark);}
+  .quiz-opt.wrong{background:#f2ddd6; border-color:var(--bad); color:var(--clay-dark);}
+  .quiz-opt[disabled]{cursor:default;}
+  .quiz-next{
+    margin-top:20px;
+    border:none;
+    background:var(--olive);
+    color:#fff;
+    font-weight:600;
+    padding:10px 22px;
+    border-radius:999px;
+    cursor:pointer;
+    display:none;
+  }
+  .quiz-end{
+    text-align:center;
+    padding:40px 20px;
+  }
+  .quiz-end h3{font-size:1.7rem; margin-bottom:10px;}
+  .quiz-end p{color:var(--ink-soft); margin-bottom:20px;}
+  .quiz-restart{
+    border:none;
+    background:var(--clay);
+    color:#fff;
+    font-weight:600;
+    padding:11px 26px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+
+  @media (max-width:880px){
+    .shell{flex-direction:column;}
+    .rail{
+      position:relative;
+      width:100%;
+      height:auto;
+      flex-direction:row;
+      overflow-x:auto;
+      padding:16px 18px;
+      align-items:center;
+    }
+    .brand{margin-bottom:0; margin-right:14px;}
+    nav.tabs{flex-direction:row;}
+    .rail-foot{display:none;}
+    main.stage{padding:26px 18px 50px;}
+    .map-circle{width:100%;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="mark"></div>
+      <h1>Study Smart</h1>
+      <p>Pharmacognosy · Lipids</p>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="overview"><span class="num">01</span>Overview</button>
+      <button class="tab-btn" data-tab="diagrams"><span class="num">02</span>Diagrams</button>
+      <button class="tab-btn" data-tab="mindmap"><span class="num">03</span>Mind Map</button>
+      <button class="tab-btn" data-tab="flashcards"><span class="num">04</span>Flashcards</button>
+      <button class="tab-btn" data-tab="quiz"><span class="num">05</span>Quiz Bank</button>
+    </nav>
+    <div class="rail-foot">© Anmar Taha</div>
+  </aside>
+
+  <main class="stage">
+
+    <!-- ===================== 1. OVERVIEW ===================== -->
+    <section class="panel active" id="overview">
+      <div class="panel-head">
+        <div class="eyebrow">Section 01</div>
+        <h2>The essentials, at a glance</h2>
+        <p>No lecture, just the rules worth remembering before an exam.</p>
+      </div>
+      <div class="rule-grid" id="overviewGrid"></div>
+    </section>
+
+    <!-- ===================== 2. DIAGRAMS ===================== -->
+    <section class="panel" id="diagrams">
+      <div class="panel-head">
+        <div class="eyebrow">Section 02</div>
+        <h2>Diagrams you can click through</h2>
+        <p>Every figure from the topic, rebuilt so you can explore it piece by piece.</p>
+      </div>
+
+      <div class="diagram-block">
+        <h3>Biosynthesis of lipids</h3>
+        <div class="sub">Click any box to read what it is and where it leads.</div>
+        <div class="flow" id="flowChart"></div>
+        <div class="flow-detail" id="flowDetail">Select a box above to see its description here.</div>
+      </div>
+
+      <div class="diagram-block">
+        <h3>Fatty acid chain: saturated vs. unsaturated</h3>
+        <div class="sub">Toggle to see how a double bond changes the shape of the tail.</div>
+        <div class="toggle-row">
+          <button class="toggle-btn active" data-chain="sat">Saturated</button>
+          <button class="toggle-btn" data-chain="unsat">Unsaturated</button>
+        </div>
+        <div class="chain-wrap">
+          <svg id="chainSvg" width="440" height="140" viewBox="0 0 440 140"></svg>
+          <div class="chain-note" id="chainNote"></div>
+        </div>
+      </div>
+
+      <div class="diagram-block">
+        <h3>Cis vs. trans bonds</h3>
+        <div class="sub">Toggle to see where the hydrocarbon pieces sit around the double bond.</div>
+        <div class="toggle-row">
+          <button class="toggle-btn active" data-ct="cis">Cis</button>
+          <button class="toggle-btn" data-ct="trans">Trans</button>
+        </div>
+        <div class="chain-wrap">
+          <svg id="ctSvg" width="440" height="140" viewBox="0 0 440 140"></svg>
+          <div class="chain-note" id="ctNote"></div>
+        </div>
+      </div>
+
+      <div class="diagram-block">
+        <h3>Anatomy of a wax molecule</h3>
+        <div class="sub">Click a segment to see what it contributes.</div>
+        <div class="wax-row">
+          <div class="wax-part fa" data-wax="fa">Fatty acid section</div>
+          <div class="wax-part link" data-wax="link">ester</div>
+          <div class="wax-part alc" data-wax="alc">Long-chain alcohol section</div>
+        </div>
+        <div class="wax-detail" id="waxDetail">Click a segment above to learn what it is.</div>
+      </div>
+
+      <div class="diagram-block">
+        <h3>Fixed oils vs. waxes</h3>
+        <div class="sub">Click a row to expand the detail behind it.</div>
+        <table class="cmp" id="cmpTable"></table>
+      </div>
+    </section>
+
+    <!-- ===================== 3. MIND MAP ===================== -->
+    <section class="panel" id="mindmap">
+      <div class="panel-head">
+        <div class="eyebrow">Section 03</div>
+        <h2>One topic, twelve branches</h2>
+        <p>Click a branch to load its summary in the panel beside it.</p>
+      </div>
+      <div class="map-wrap">
+        <div class="map-circle">
+          <svg viewBox="0 0 100 100" id="mapLines"></svg>
+          <div class="map-hub">Lipids</div>
+          <div id="mapNodes"></div>
+        </div>
+        <div class="map-panel">
+          <h3 id="mapTitle">Pick a branch</h3>
+          <p id="mapText" class="hint">Its summary will appear right here, in this same panel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. FLASHCARDS ===================== -->
+    <section class="panel" id="flashcards">
+      <div class="panel-head">
+        <div class="eyebrow">Section 04</div>
+        <h2>Flashcards</h2>
+        <p>Pick a difficulty level, then filter by topic or shuffle the deck.</p>
+      </div>
+      <div class="level-row" id="fcLevelRow"></div>
+      <div class="fc-controls" id="fcControls"></div>
+      <div class="fc-grid" id="fcGrid"></div>
+    </section>
+
+    <!-- ===================== 5. QUIZ ===================== -->
+    <section class="panel" id="quiz">
+      <div class="panel-head">
+        <div class="eyebrow">Section 05</div>
+        <h2>Quiz bank</h2>
+        <p>Pick a difficulty level. The correct option is shuffled to a new position every question.</p>
+      </div>
+      <div class="level-row" id="quizLevelRow"></div>
+      <div class="quiz-top">
+        <div class="quiz-progress"><div class="quiz-progress-fill" id="quizProgress"></div></div>
+        <div class="quiz-score" id="quizScore">Score: 0 / 0</div>
+      </div>
+      <div class="quiz-card" id="quizCard"></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ===================== NAV ===================== */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ===================== OVERVIEW DATA ===================== */
+const overviewCards = [
+  {c:'', t:'What lipids are', items:[
+    'Non-polar, water-insoluble biomolecules.',
+    'The group covers fats, fixed oils, waxes, and related compounds.',
+    'Classified by origin: plant lipids and animal lipids.'
+  ]},
+  {c:'clay', t:'Why they matter in pharmacognosy', items:[
+    'Pharmaceutical excipients — ointments, suppositories.',
+    'Nutritional supplements.',
+    'Industrial use — soaps, cosmetics.',
+    'Chemical raw materials — fatty acid derivatives.'
+  ]},
+  {c:'honey', t:'How they are built', items:[
+    'Fatty acid biosynthesis starts from combined acetate units.',
+    'Glycolysis → Pyruvate → Acetyl CoA is the shared starting route.',
+    'Acetyl CoA splits into the mevalonate pathway (→ steroids, terpenes) and the malonate pathway (→ fatty acids → lipids).'
+  ]},
+  {c:'', t:'Glycerol and triglycerides', items:[
+    'Glycerol is an alcohol with a hydroxyl group on each of its 3 carbons.',
+    '3 fatty acids + glycerol, joined by dehydration synthesis, form a triglyceride.'
+  ]},
+  {c:'', t:'Fatty acid shape rule', items:[
+    'Tail: long hydrocarbon chain, hydrophobic.',
+    'Head: carboxyl group, hydrophilic.',
+    'This is why soap can trap oily dirt and rinse it away with water.'
+  ]},
+  {c:'clay', t:'Saturated vs. unsaturated', items:[
+    'Saturated: all single bonds, mostly animal, straight and packed, solid — except cod liver oil (liquid).',
+    'Unsaturated: has double bond(s), mostly plant, kinked, liquid — except cocoa butter (solid).'
+  ]},
+  {c:'clay', t:'Cis vs. trans — the frying rule', items:[
+    'Natural vegetable oils are mostly cis.',
+    'Frying, over time and temperature, converts some cis bonds to trans.',
+    'Trans fats are carcinogenic.'
+  ]},
+  {c:'honey', t:'Waxes, defined', items:[
+    'Esters of long-chain fatty acids with long-chain alcohols — not glycerol.',
+    'Harder, more brittle, higher melting point than fats.',
+    'Insoluble in water, soluble in organic solvents.',
+    'Not digested like triglycerides; more resistant to hydrolysis and oxidation.'
+  ]},
+  {c:'honey', t:'Where waxes come from', items:[
+    'Plant: carnauba (Copernicia prunifera), candelilla (Euphorbia species).',
+    'Animal: beeswax / Cera Alba-Flava (Apis mellifera), spermaceti (sperm whale).',
+    'Mineral: paraffin wax, ozokerite (from petroleum residues).'
+  ]},
+  {c:'', t:'The chief difference', items:[
+    'Fixed oils/fats use glycerol as the alcohol.',
+    'Waxes use a higher-molecular-weight alcohol, e.g. cetyl alcohol CH3(CH2)15OH.'
+  ]}
+];
+const grid = document.getElementById('overviewGrid');
+overviewCards.forEach(card=>{
+  const div = document.createElement('div');
+  div.className = 'rule-card' + (card.c ? ' '+card.c : '');
+  div.innerHTML = '<h3>'+card.t+'</h3><ul>'+card.items.map(i=>'<li>'+i+'</li>').join('')+'</ul>';
+  grid.appendChild(div);
+});
+
+/* ===================== FLOW CHART ===================== */
+const flowInfo = {
+  'Glycolysis':'Breakdown of glucose; the metabolic starting point that feeds into lipid biosynthesis.',
+  'Pyruvate':'The 3-carbon product of glycolysis; it is converted into Acetyl CoA.',
+  'Acetyl CoA':'The central 2-carbon unit that feeds into both lipid biosynthesis pathways.',
+  'Acetate Mevalonate Pathway':'Converts Acetyl CoA into mevalonic acid, heading toward isoprenoid-based compounds.',
+  'Mevalonic Acid':'Key intermediate of the mevalonate pathway, formed from Acetyl CoA.',
+  'Isoprenoids':'Built from mevalonic acid; the precursors of squalene.',
+  'Squalene':'Formed from isoprenoids; the shared precursor of steroids and terpenes.',
+  'Steroids':'One end product of the mevalonate branch, built from squalene.',
+  'Terpenes':'The other end product of the mevalonate branch, built from squalene.',
+  'Acetate Malonate Pathway':'Converts Acetyl CoA into malonyl CoA, heading toward fatty acid formation.',
+  'Malonyl CoA':'Key intermediate of the malonate pathway, formed from Acetyl CoA.',
+  'Fatty Acids':'Built from malonyl CoA; combine with glycerol to build lipids.',
+  'Lipids (fats & waxes)':'The final product of the malonate branch — fats and waxes.'
+};
+const flowChart = document.getElementById('flowChart');
+const mainChain = ['Glycolysis','Pyruvate','Acetyl CoA'];
+mainChain.forEach((label,i)=>{
+  const n = document.createElement('div');
+  n.className='flow-node'; n.textContent=label; n.dataset.k=label;
+  flowChart.appendChild(n);
+  if(i<mainChain.length-1){
+    const a=document.createElement('span'); a.className='flow-arrow'; a.textContent='→';
+    flowChart.appendChild(a);
+  }
+});
+const bigArrow = document.createElement('span'); bigArrow.className='flow-arrow'; bigArrow.textContent='→';
+flowChart.appendChild(bigArrow);
+
+const branches = document.createElement('div');
+branches.style.display='flex'; branches.style.flexDirection='column'; branches.style.gap='14px';
+
+const mevChain = [['Acetate Mevalonate Pathway','clay'],['Mevalonic Acid',''],['Isoprenoids',''],['Squalene',''],['Steroids / Terpenes','clay']];
+const malChain = [['Acetate Malonate Pathway',''],['Malonyl CoA',''],['Fatty Acids',''],['Lipids (fats & waxes)','clay']];
+
+function buildRow(chain){
+  const row = document.createElement('div');
+  row.className='flow'; row.style.gap='8px';
+  chain.forEach((pair,i)=>{
+    const [label,cls]=pair;
+    const n=document.createElement('div');
+    n.className='flow-node'+(cls?' '+cls:''); n.textContent=label.replace(' / ',' / ');
+    n.dataset.k = label==='Steroids / Terpenes' ? 'Steroids|Terpenes' : label;
+    row.appendChild(n);
+    if(i<chain.length-1){
+      const a=document.createElement('span'); a.className='flow-arrow'; a.textContent='→';
+      row.appendChild(a);
+    }
+  });
+  return row;
+}
+branches.appendChild(buildRow(mevChain));
+branches.appendChild(buildRow(malChain));
+flowChart.appendChild(branches);
+
+const flowDetail = document.getElementById('flowDetail');
+flowChart.addEventListener('click', e=>{
+  const node = e.target.closest('.flow-node');
+  if(!node) return;
+  flowChart.querySelectorAll('.flow-node').forEach(n=>n.classList.remove('selected'));
+  node.classList.add('selected');
+  const key = node.dataset.k;
+  if(key.includes('|')){
+    const [a,b]=key.split('|');
+    flowDetail.innerHTML = '<strong>'+a+':</strong> '+flowInfo[a]+'<br><br><strong>'+b+':</strong> '+flowInfo[b];
+  } else {
+    flowDetail.innerHTML = '<strong>'+key+':</strong> '+flowInfo[key];
+  }
+});
+
+/* ===================== FATTY ACID CHAIN SVG ===================== */
+function chainPoints(unsat){
+  const n=15, dx=26, x0=34, yMid=70, amp=26;
+  let pts=[];
+  for(let i=0;i<n;i++){
+    let parity = i%2;
+    if(unsat && i>=8) parity = (i+1)%2; // phase shift creates the kink
+    const y = yMid + (parity===0 ? -amp : amp);
+    pts.push({x:x0+i*dx, y});
+  }
+  return pts;
+}
+function drawChain(svgEl, unsat){
+  const pts = chainPoints(unsat);
+  let s = '';
+  const line = pts.map(p=>p.x+','+p.y).join(' ');
+  s += '<polyline points="'+line+'" fill="none" stroke="#4b5636" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach(p=>{ s += '<circle cx="'+p.x+'" cy="'+p.y+'" r="3.2" fill="#6c7a4c"/>'; });
+  if(unsat){
+    const a=pts[7], b=pts[8];
+    const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy);
+    const ox=-dy/len*5, oy=dx/len*5;
+    s += '<line x1="'+(a.x+ox)+'" y1="'+(a.y+oy)+'" x2="'+(b.x+ox)+'" y2="'+(b.y+oy)+'" stroke="#b1573b" stroke-width="3"/>';
+  }
+  s += '<text x="'+(pts[0].x-24)+'" y="'+(pts[0].y+4)+'" font-size="13" font-weight="700" fill="#8a4029">HOOC</text>';
+  s += '<text x="'+(pts[pts.length-1].x+6)+'" y="'+(pts[pts.length-1].y+4)+'" font-size="13" font-weight="700" fill="#4b5636">CH3</text>';
+  svgEl.innerHTML = s;
+}
+const chainSvg = document.getElementById('chainSvg');
+const chainNote = document.getElementById('chainNote');
+function setChain(mode){
+  document.querySelectorAll('[data-chain]').forEach(b=>b.classList.toggle('active', b.dataset.chain===mode));
+  drawChain(chainSvg, mode==='unsat');
+  chainNote.innerHTML = mode==='sat'
+    ? '<strong>Saturated:</strong> all single bonds, maximum hydrogens, straight and closely packed — solid at room temperature. Mostly from animal sources.'
+    : '<strong>Unsaturated:</strong> one or more double bonds create a kink, so the chain packs poorly — liquid at room temperature. Mostly from plant sources.';
+}
+document.querySelectorAll('[data-chain]').forEach(b=> b.addEventListener('click', ()=>setChain(b.dataset.chain)));
+setChain('sat');
+
+/* ===================== CIS / TRANS SVG ===================== */
+function drawCT(svgEl, isTrans){
+  const pts = chainPoints(true); // reuse kinked backbone
+  let s='';
+  const line = pts.map(p=>p.x+','+p.y).join(' ');
+  s += '<polyline points="'+line+'" fill="none" stroke="#4b5636" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach(p=>{ s += '<circle cx="'+p.x+'" cy="'+p.y+'" r="3.2" fill="#6c7a4c"/>'; });
+  const a=pts[7], b=pts[8];
+  const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy);
+  const ox=-dy/len*5, oy=dx/len*5;
+  s += '<line x1="'+(a.x+ox)+'" y1="'+(a.y+oy)+'" x2="'+(b.x+ox)+'" y2="'+(b.y+oy)+'" stroke="#b1573b" stroke-width="3"/>';
+  // substituent stubs
+  const stubLen = 24;
+  if(!isTrans){
+    s += '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+a.x+'" y2="'+(a.y-stubLen)+'" stroke="#c2922f" stroke-width="3"/>';
+    s += '<line x1="'+b.x+'" y1="'+b.y+'" x2="'+b.x+'" y2="'+(b.y-stubLen)+'" stroke="#c2922f" stroke-width="3"/>';
+  } else {
+    s += '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+a.x+'" y2="'+(a.y-stubLen)+'" stroke="#c2922f" stroke-width="3"/>';
+    s += '<line x1="'+b.x+'" y1="'+b.y+'" x2="'+b.x+'" y2="'+(b.y+stubLen)+'" stroke="#c2922f" stroke-width="3"/>';
+  }
+  s += '<text x="'+(pts[0].x-24)+'" y="'+(pts[0].y+4)+'" font-size="13" font-weight="700" fill="#8a4029">HOOC</text>';
+  s += '<text x="'+(pts[pts.length-1].x+6)+'" y="'+(pts[pts.length-1].y+4)+'" font-size="13" font-weight="700" fill="#4b5636">CH3</text>';
+  svgEl.innerHTML = s;
+}
+const ctSvg = document.getElementById('ctSvg');
+const ctNote = document.getElementById('ctNote');
+function setCT(mode){
+  document.querySelectorAll('[data-ct]').forEach(b=>b.classList.toggle('active', b.dataset.ct===mode));
+  drawCT(ctSvg, mode==='trans');
+  ctNote.innerHTML = mode==='cis'
+    ? '<strong>Cis:</strong> the two hydrocarbon pieces sit on the same side of the double bond. This is the natural form in vegetable oils.'
+    : '<strong>Trans:</strong> the two pieces sit on opposite sides. Frying can convert cis bonds into trans bonds over time and temperature — trans fats are carcinogenic.';
+}
+document.querySelectorAll('[data-ct]').forEach(b=> b.addEventListener('click', ()=>setCT(b.dataset.ct)));
+setCT('cis');
+
+/* ===================== WAX DIAGRAM ===================== */
+const waxInfo = {
+  fa:'<strong>Fatty acid section:</strong> a long hydrocarbon chain ending in the acid group that forms the ester bond.',
+  link:'<strong>Ester linkage:</strong> the bond joining the fatty acid to the alcohol — this is what makes it a wax.',
+  alc:'<strong>Long-chain alcohol section:</strong> unlike fixed oils, this alcohol is not glycerol — for example cetyl alcohol, CH3(CH2)15OH.'
+};
+document.querySelectorAll('.wax-part').forEach(p=>{
+  p.addEventListener('click', ()=>{ document.getElementById('waxDetail').innerHTML = waxInfo[p.dataset.wax]; });
+});
+
+/* ===================== COMPARISON TABLE ===================== */
+const cmpRows = [
+  ['Chemical structure','Triglycerides','Esters of fatty acids + long-chain alcohols','The fixed-oil alcohol is glycerol; the wax alcohol is a longer-chain alcohol such as cetyl alcohol.'],
+  ['Melting point','Lower','Higher','Wax esters pack and resist heat more than triglycerides do.'],
+  ['Texture','Liquid / semi-solid','Solid','Waxes are harder and more brittle than fats.'],
+  ['Rancidity','Prone','Less prone','Waxes are more resistant to hydrolysis and oxidation than fixed oils.'],
+  ['Uses','Nutritional, pharmaceutical, industrial','Cosmetic, protective coatings, ointment stiffening','Fixed oils are consumed and formulated internally; waxes mostly do external, structural jobs.']
+];
+const cmpTable = document.getElementById('cmpTable');
+cmpTable.innerHTML = '<tr><th>Feature</th><th>Fixed oils</th><th>Waxes</th></tr>';
+cmpRows.forEach((r,i)=>{
+  const tr = document.createElement('tr');
+  tr.className='data-row';
+  tr.innerHTML = '<td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td>';
+  const dr = document.createElement('tr');
+  dr.className='detail-row';
+  dr.innerHTML = '<td colspan="3">'+r[3]+'</td>';
+  tr.addEventListener('click', ()=> dr.classList.toggle('open'));
+  cmpTable.appendChild(tr);
+  cmpTable.appendChild(dr);
+});
+
+/* ===================== MIND MAP ===================== */
+const mapNodesData = [
+  {x:50,y:10,t:'Definition',d:'Lipids are non-polar, water-insoluble biomolecules including fats, fixed oils, waxes, and related compounds.'},
+  {x:70,y:15.4,t:'Pharmaceutical Uses',d:'Used as pharmaceutical excipients (ointments, suppositories), nutritional supplements, industrial materials (soaps, cosmetics), and chemical raw materials (fatty acid derivatives).'},
+  {x:84.6,y:30,t:'Biosynthesis',d:'Glycolysis → Pyruvate → Acetyl CoA, which splits into the acetate mevalonate pathway (→ mevalonic acid → isoprenoids → squalene → steroids/terpenes) and the acetate malonate pathway (→ malonyl CoA → fatty acids → lipids).'},
+  {x:90,y:50,t:'Glycerol & Triglycerides',d:'Glycerol is an alcohol with a hydroxyl group on each of its three carbons. Three fatty acids joined to it by dehydration synthesis form a triglyceride.'},
+  {x:84.6,y:70,t:'Fatty Acid Structure',d:'A hydrophobic hydrocarbon tail and a hydrophilic carboxyl head — the structure that lets soap emulsify oily dirt into water.'},
+  {x:70,y:84.6,t:'Saturated Fats',d:'All single bonds, maximum hydrogens, straight and closely packed, mostly animal, solid at room temperature — except cod liver oil, which is liquid.'},
+  {x:50,y:90,t:'Unsaturated Oils',d:'One or more double bonds create a kink that prevents close packing, mostly plant, liquid at room temperature — except cocoa butter, which is solid.'},
+  {x:30,y:84.6,t:'Cis vs Trans',d:'Cis places both hydrocarbon pieces on the same side of the double bond; trans places them on opposite sides. Frying converts some cis bonds to trans bonds, and trans fats are carcinogenic.'},
+  {x:15.4,y:70,t:'Waxes',d:'Esters of long-chain fatty acids with long-chain alcohols (not glycerol) — harder, higher-melting, water-insoluble, not digested like triglycerides, and resistant to hydrolysis and oxidation.'},
+  {x:10,y:50,t:'Types of Waxes',d:'Plant: carnauba, candelilla. Animal: beeswax (Cera Alba/Flava), spermaceti. Mineral: paraffin wax, ozokerite.'},
+  {x:15.4,y:30,t:'Fixed Oils vs Waxes',d:'Fixed oils are triglycerides with a lower melting point and higher rancidity; waxes are alcohol esters with a higher melting point and better stability. The chief difference is the alcohol: glycerol vs. a long-chain alcohol like cetyl alcohol.'},
+  {x:30,y:15.4,t:'Applications',d:'Fixed oils: injection vehicles (sesame), laxatives (castor), emollients (olive), ointment bases (coconut, peanut). Waxes: ointment consistency, tablet coating (carnauba), cosmetics, candles and polishes.'}
+];
+const mapLines = document.getElementById('mapLines');
+const mapNodesEl = document.getElementById('mapNodes');
+mapNodesData.forEach((n,i)=>{
+  const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1','50'); l.setAttribute('y1','50');
+  l.setAttribute('x2', n.x); l.setAttribute('y2', n.y);
+  l.setAttribute('stroke', '#c9bd9c'); l.setAttribute('stroke-width','0.6');
+  mapLines.appendChild(l);
+
+  const btn = document.createElement('div');
+  btn.className='map-node';
+  btn.style.left = n.x+'%'; btn.style.top = n.y+'%';
+  btn.textContent = n.t;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.map-node').forEach(m=>m.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('mapTitle').textContent = n.t;
+    const mt = document.getElementById('mapText');
+    mt.textContent = n.d;
+    mt.classList.remove('hint');
+  });
+  mapNodesEl.appendChild(btn);
+});
+
+/* ===================== FLASHCARDS DATA ===================== */
+// Each entry: [category, difficulty, question, answer]
+const flashcards = [
+["Basics","Easy","What are lipids?","Non-polar, water-insoluble biomolecules that include fats, fixed oils, waxes, and related compounds."],
+["Basics","Easy","Lipids are insoluble in water because they are chemically —?","Non-polar."],
+["Basics","Easy","Name the four groups of compounds included under lipids.","Fats, fixed oils, waxes, and related compounds."],
+["Basics","Easy","In pharmacognosy, lipids are classified according to their —?","Origin (plant and animal)."],
+["Basics","Easy","Fixed oils are mostly obtained from which source?","Plant sources."],
+["Basics","Easy","Fats are mostly obtained from which source?","Animal sources."],
+["Applications","Easy","Name one pharmaceutical excipient use of lipids.","Ointments and suppositories."],
+["Applications","Easy","Lipids are used nutritionally as —?","Nutritional supplements."],
+["Applications","Easy","Give one industrial use of lipids.","Soaps and cosmetics."],
+["Applications","Easy","Lipids serve as raw material for which chemical derivatives?","Fatty acid derivatives."],
+["Applications","Easy","Sesame oil is used pharmaceutically as a vehicle for —?","Intramuscular injections."],
+["Applications","Easy","Castor oil is pharmaceutically used as a —?","Laxative."],
+["Biosynthesis","Easy","Fatty acid biosynthesis begins from the combination of —?","Acetate units."],
+["Biosynthesis","Easy","What does glycolysis produce?","Pyruvate."],
+["Biosynthesis","Easy","Pyruvate is converted into —?","Acetyl CoA."],
+["Biosynthesis","Easy","Acetyl CoA splits into which two pathways?","The acetate mevalonate pathway and the acetate malonate pathway."],
+["Biosynthesis","Easy","The acetate mevalonate pathway produces —?","Mevalonic acid."],
+["Biosynthesis","Easy","Mevalonic acid is converted into —?","Isoprenoids."],
+["Biosynthesis","Easy","Isoprenoids lead to the formation of —?","Squalene."],
+["Biosynthesis","Easy","Squalene is the precursor of —?","Steroids and terpenes."],
+["Biosynthesis","Easy","The acetate malonate pathway produces —?","Malonyl CoA."],
+["Biosynthesis","Easy","Malonyl CoA leads to the formation of —?","Fatty acids."],
+["Fatty Acids","Easy","Glycerol is a type of —?","Alcohol with a hydroxyl group on each of its three carbons."],
+["Fatty Acids","Easy","A triglyceride is formed from glycerol and how many fatty acids?","Three fatty acids."],
+["Fatty Acids","Easy","Glycerol and fatty acids join by which reaction?","Dehydration synthesis."],
+["Fatty Acids","Easy","The tail of a fatty acid is described as —?","A long hydrocarbon chain that is hydrophobic."],
+["Fatty Acids","Easy","The head of a fatty acid is described as —?","A carboxyl group that is hydrophilic."],
+["Fatty Acids","Easy","Fatty acids are the main component of which cleaning product?","Soap."],
+["Fatty Acids","Easy","Saturated fatty acids have what kind of bonds between their carbons?","All single bonds."],
+["Fatty Acids","Easy","Saturated fats are mostly derived from —?","Animal sources."],
+["Fatty Acids","Easy","Which oil is a liquid exception among saturated fats?","Cod liver oil."],
+["Fatty Acids","Easy","Unsaturated fatty acids contain how many double bonds, at minimum?","One or more."],
+["Fatty Acids","Easy","A double bond in an unsaturated fatty acid causes a —?","Bend (kink) in the molecule."],
+["Fatty Acids","Easy","Unsaturated oils are typically — at room temperature?","Liquid."],
+["Fatty Acids","Easy","Which fat is a solid exception among unsaturated fats?","Cocoa butter."],
+["Fatty Acids","Easy","In a cis bond, the two hydrocarbon pieces are on —?","The same side of the molecule."],
+["Fatty Acids","Easy","In a trans bond, the two hydrocarbon pieces are on —?","Opposite sides of the molecule."],
+["Fatty Acids","Easy","Naturally occurring vegetable oils mostly contain which bond type?","Cis bonds."],
+["Waxes","Easy","Waxes are esters of long-chain fatty acids with —?","Long-chain alcohols (not glycerol)."],
+["Waxes","Easy","Compared to fixed oils, waxes are more resistant to —?","Hydrolysis and oxidation."],
+["Waxes","Easy","Compared to fats, waxes are — in texture?","Harder and more brittle."],
+["Waxes","Easy","Waxes generally have — melting points than fats?","Higher."],
+["Waxes","Easy","Regarding solubility, waxes are —?","Insoluble in water, soluble in organic solvents."],
+["Waxes","Easy","In plants, waxes are generally found covering —?","The epidermis of leaves and fruits."],
+["Waxes","Easy","The main function of plant waxes is to —?","Prevent the loss of water."],
+["Waxes","Easy","Waxes are also produced by which insects?","Bees and wasps (honeycombs)."],
+["Waxes","Easy","Carnauba wax is obtained from which plant?","Copernicia prunifera."],
+["Waxes","Easy","Carnauba wax, being very hard, is used in —?","Tablet coating and polishes."],
+["Waxes","Easy","Candelilla wax is obtained from which plant genus?","Euphorbia species."],
+["Waxes","Easy","Candelilla wax is used in —?","Cosmetics and adhesives."],
+["Waxes","Easy","Beeswax is also known by which names?","Cera Alba / Cera Flava."],
+["Waxes","Easy","Beeswax is obtained from which insect?","Apis mellifera."],
+["Waxes","Easy","A key chemical component of beeswax is —?","Myricyl palmitate."],
+["Waxes","Easy","Spermaceti is obtained from —?","The head cavity of the sperm whale."],
+["Comparison","Easy","Chemically, fixed oils/fats are classified as —?","Triglycerides."],
+["Comparison","Easy","Chemically, waxes are classified as —?","Esters of fatty acids and long-chain alcohols."],
+["Comparison","Easy","In texture, fixed oils are typically —?","Liquid or semi-solid."],
+["Comparison","Easy","Regarding rancidity, fixed oils are —?","Prone to rancidity."],
+["Comparison","Easy","The chief chemical difference between fixed oils/fats and waxes is —?","The type of alcohol involved."],
+["Comparison","Easy","Cetyl alcohol's chemical formula is —?","CH3(CH2)15OH."],
+["Basics","Medium","Why are lipids classified separately from carbohydrates and proteins?","Because they are non-polar and water-insoluble, unlike the polar, water-soluble carbohydrates and proteins."],
+["Basics","Medium","What distinguishes a fixed oil from a volatile (essential) oil in composition?","Fixed oils are non-volatile triglycerides of fatty acids, unlike volatile essential oils."],
+["Basics","Medium","How does the origin of a lipid (plant vs. animal) generally predict its degree of saturation?","Animal lipids are generally saturated (fats), while plant lipids are generally unsaturated (fixed oils)."],
+["Basics","Medium","Why might a lipid-based excipient suit a suppository better than a water-based one?","Because lipids are non-polar and can melt at body temperature while remaining solid at room temperature, releasing the drug appropriately."],
+["Applications","Medium","Why is olive oil suitable as a pharmaceutical emollient?","As an unsaturated fixed oil it stays semi-liquid and softens/soothes the skin as a nutritive."],
+["Applications","Medium","Why are coconut and peanut oils suitable as ointment bases?","They are fixed oils with a consistency and stability suited to topical bases."],
+["Applications","Medium","How does a wax modify an ointment's consistency compared to a fixed oil alone?","Waxes are harder, higher-melting, and more resistant to hydrolysis, so they stiffen and stabilize the ointment."],
+["Applications","Medium","Why is sesame oil chosen as an injectable vehicle rather than an aqueous one?","As a non-polar fixed oil, it can dissolve lipophilic drugs and give a depot/sustained-release effect intramuscularly."],
+["Applications","Medium","Beyond tablet coating, why is carnauba wax valued industrially?","Because it is very hard with a high melting point, which also makes it useful in polishes."],
+["Applications","Medium","Why would castor oil's action as a laxative differ from a typical nutritive fixed oil's action?","Its particular fatty acid composition gives it a specific bowel-stimulating effect not shared by every fixed oil."],
+["Biosynthesis","Medium","Why do both fatty acids and steroids/terpenes trace back to the same starting molecule?","Because both pathways branch from Acetyl CoA, common to the mevalonate and malonate routes."],
+["Biosynthesis","Medium","What is the key branch point where fatty acid and steroid biosynthesis diverge?","Acetyl CoA, which splits into the acetate mevalonate and acetate malonate pathways."],
+["Biosynthesis","Medium","Why does the malonate pathway matter specifically for lipid (fat and wax) formation?","Because it produces Malonyl CoA, which leads to fatty acids, the building blocks of fats and waxes."],
+["Biosynthesis","Medium","Why does the mevalonate pathway not directly yield fatty acids?","Because it leads instead to isoprenoids, squalene, and ultimately steroids and terpenes."],
+["Biosynthesis","Medium","What links glycolysis to fatty acid biosynthesis?","Glycolysis produces pyruvate, which converts to Acetyl CoA, entering the malonate pathway toward fatty acids."],
+["Biosynthesis","Medium","Why is Acetyl CoA described as a metabolic crossroads in lipid biosynthesis?","Because from Acetyl CoA, metabolism can proceed toward steroids/terpenes (mevalonate) or fatty acids/lipids (malonate)."],
+["Fatty Acids","Medium","Why does forming a triglyceride release three water molecules?","Because each of the three fatty acids forms an ester bond with one hydroxyl group of glycerol via dehydration synthesis, releasing one water per bond."],
+["Fatty Acids","Medium","Why can a fatty acid act as an emulsifier in soap?","Because its hydrophobic tail dissolves in oily dirt while its hydrophilic head dissolves in water, bridging the two."],
+["Fatty Acids","Medium","Why are saturated fatty acids able to pack closely together?","Because their straight chains (all single bonds, maximum hydrogens) allow tight, regular packing."],
+["Fatty Acids","Medium","Why does a double bond lower the packing efficiency of a fatty acid chain?","Because it introduces a bend (kink) that prevents the chains from lying flat and close together."],
+["Fatty Acids","Medium","Cod liver oil is an exception because it is an animal-derived fat that is —?","Liquid at room temperature."],
+["Fatty Acids","Medium","Cocoa butter is an exception because it is a plant-derived fat that is —?","Solid at room temperature."],
+["Fatty Acids","Medium","Why does the cis/trans distinction matter for the shape of an unsaturated fatty acid?","In the cis form the chain kinks (pieces on the same side), while the trans form keeps the chain relatively straight (pieces on opposite sides)."],
+["Fatty Acids","Medium","Why does frying convert some cis bonds into trans bonds?","Because time and temperature during frying provide the energy needed to isomerize the double bond configuration."],
+["Fatty Acids","Medium","Why are trans fats formed during frying considered a health concern?","Because they are carcinogenic."],
+["Fatty Acids","Medium","If a vegetable oil is repeatedly used for deep frying, what change would you expect in its bond ratio?","An increase in trans bonds relative to the original mostly-cis composition."],
+["Fatty Acids","Medium","Why do unsaturated oils fail to pack as closely as saturated fats?","Because the double-bond-induced kink disrupts the straight, regular alignment needed for close packing."],
+["Fatty Acids","Medium","Why is a fatty acid's head hydrophilic while its tail is hydrophobic?","Because the carboxyl group can interact with water (polar), while the long hydrocarbon chain cannot (non-polar)."],
+["Fatty Acids","Medium","Between a saturated and unsaturated fatty acid of similar length, which has the higher melting point, and why?","The saturated one, because its straight chain allows closer packing and stronger intermolecular forces."],
+["Fatty Acids","Medium","Why does having one or more double bonds make a fatty acid 'unsaturated' rather than 'saturated'?","Because saturation refers to being fully bonded to hydrogen (single bonds only); a double bond means fewer hydrogens are attached."],
+["Waxes","Medium","Why are waxes not digested like triglycerides?","Because they are esters of fatty acids with long-chain alcohols (not glycerol), a structure the enzymes for triglycerides cannot break down."],
+["Waxes","Medium","Why are waxes more resistant to hydrolysis than fixed oils?","Because their ester bond to a long-chain alcohol (instead of glycerol) is more chemically stable."],
+["Waxes","Medium","Why do plants coat their leaf and fruit epidermis with wax rather than fixed oil?","Wax's higher resistance to water loss, from its stable hydrophobic structure, makes it a better protective barrier."],
+["Waxes","Medium","Why do bees and wasps use wax rather than a fixed oil to build honeycombs?","Wax's hardness, higher melting point, and resistance to hydrolysis/oxidation make it a stable structural material."],
+["Waxes","Medium","Why is spermaceti now largely replaced by synthetic cetyl esters in pharmacy?","Likely due to sourcing concerns with a natural whale-derived product, prompting synthetic cetyl-based alternatives with similar properties."],
+["Waxes","Medium","Why are paraffin wax and ozokerite, though mineral in origin, still classified functionally as waxes?","Because they share the physical wax-like properties (hardness, high melting point, water resistance) used similarly in ointment bases."],
+["Waxes","Medium","Why would carnauba wax be preferred over beeswax for a very hard tablet coating?","Because carnauba wax is notably harder, matching the need for a rigid protective coat."],
+["Waxes","Medium","Why is candelilla wax suited for adhesives, unlike a fixed oil?","Its hardness, stability, and resistance to hydrolysis give it a tacky yet stable consistency unlike a liquid oil."],
+["Waxes","Medium","What property connects beeswax's myricyl palmitate content to its cosmetic use?","Myricyl palmitate is a long-chain wax ester that provides the firm, stable texture cosmetics need."],
+["Waxes","Medium","Why is ozokerite classified alongside paraffin wax as a mineral wax rather than with carnauba or beeswax?","Because it shares their origin from non-biological, petroleum-based sources rather than plant or animal biosynthesis."],
+["Waxes","Medium","Why does a higher melting point make waxes better suited than fats for tablet coatings and polishes?","Because they remain solid and stable under normal handling and storage temperatures, unlike lower-melting fats."],
+["Waxes","Medium","Why does the insolubility of waxes in water, plus solubility in organic solvents, matter for cosmetic formulation?","It allows waxes to form stable, water-resistant films (e.g., in lipsticks/creams) while still being processable with organic solvents."],
+["Waxes","Medium","Why can a wax's greater resistance to hydrolysis and oxidation give a cosmetic product a longer shelf life?","Because the wax resists the breakdown reactions (hydrolysis/oxidation) that would otherwise cause rancidity or degradation over time."],
+["Waxes","Medium","Beeswax and spermaceti are both animal waxes from very different sources — what does this show about the 'animal wax' classification?","The classification is based on animal origin (insect vs. marine mammal), not on a shared specific source organism."],
+["Comparison","Medium","Why do fixed oils go rancid more easily than waxes?","Because fixed oils (triglycerides) are more chemically reactive and prone to hydrolysis/oxidation than the more stable ester bonds in waxes."],
+["Comparison","Medium","Why do fixed oils generally have a lower melting point than waxes?","Their glycerol-based, often-unsaturated triglyceride structure packs less tightly than the long-chain alcohol esters in waxes."],
+["Comparison","Medium","What underlying property explains why fixed oils suit nutrition/pharmacy/industry while waxes suit cosmetics/coatings?","Fixed oils' digestibility and lower melting point suit ingestion and drug delivery, while waxes' hardness and indigestibility suit protective/cosmetic roles."],
+["Comparison","Medium","If a substance is an ester of a fatty acid with a long-chain alcohol (not glycerol), is it a fixed oil or a wax?","A wax."],
+["Comparison","Medium","If a substance is a triglyceride, is it more likely a fixed oil/fat or a wax?","A fixed oil/fat."],
+["Comparison","Medium","Why is the type of alcohol (glycerol vs. long-chain alcohol) the 'chief difference' between fixed oils and waxes, rather than the fatty acid?","Because both classes use fatty acids, but the alcohol they are esterified to is what structurally distinguishes them."],
+["Basics","Hard","A compound is non-polar and water-insoluble, but is a protein-based enzyme cofactor — is it a lipid by this topic's classification?","No — lipids must fall within fats, fixed oils, waxes, or related compounds; a protein-based cofactor is not a lipid despite being non-polar."],
+["Basics","Hard","Which single physicochemical property most fundamentally unifies fats, fixed oils, and waxes despite their structural differences?","They are all non-polar and water-insoluble."],
+["Applications","Hard","Why would a wax be unsuitable as an injectable oily vehicle, even though it is lipophilic like a fixed oil?","Because waxes are hard, high-melting, and resistant to breakdown, unsuitable for remaining liquid and absorbable the way a fixed oil does."],
+["Applications","Hard","A formulation must both stiffen an ointment AND coat a tablet with high hardness — which lipid category fits both roles better than a fixed oil, and why?","A wax, because its hardness, high melting point, and resistance to hydrolysis/oxidation suit both stiffening and hard coating, unlike lower-melting, more reactive fixed oils."],
+["Applications","Hard","Castor oil (laxative) and olive oil (emollient/nutritive) are both fixed oils used very differently — what does this show about classifying a lipid's therapeutic use?","A shared chemical class (fixed oil/triglyceride) does not determine a single biological effect; the specific fatty acid composition drives the distinct pharmacological action."],
+["Applications","Hard","Why are coconut, peanut, and olive oils used as ointment bases or nutritives, while beeswax is used only to modify consistency?","The fixed oils are relatively soft, spreadable triglycerides suited as a base, whereas beeswax's hardness and high melting point suit it only for stiffening, not as a primary base."],
+["Biosynthesis","Hard","Trace the full pathway from glycolysis to a terpene, naming every intermediate in order.","Glycolysis → Pyruvate → Acetyl CoA → (acetate mevalonate pathway) → Mevalonic acid → Isoprenoids → Squalene → Terpenes."],
+["Biosynthesis","Hard","Trace the full pathway from glycolysis to a lipid (fat/wax), naming every intermediate in order.","Glycolysis → Pyruvate → Acetyl CoA → (acetate malonate pathway) → Malonyl CoA → Fatty acids → Lipids (fats and waxes)."],
+["Biosynthesis","Hard","If Acetyl CoA production were blocked, which two downstream product families would fail to form, and why?","Both steroids/terpenes and fatty acids/lipids, because Acetyl CoA is the shared entry point into both the mevalonate and malonate pathways."],
+["Biosynthesis","Hard","Squalene is a later branch point toward steroids and terpenes — which earlier branch point separates the steroid/terpene fate from the fatty-acid/lipid fate?","Acetyl CoA, where the mevalonate pathway (toward squalene, steroids, terpenes) diverges from the malonate pathway (toward fatty acids and lipids)."],
+["Biosynthesis","Hard","Why is it structurally logical that steroids and fatty acids both derive from acetate units despite very different final structures?","Both pathways begin by assembling two-carbon acetate/Acetyl CoA units, just via different downstream condensation routes (mevalonate vs. malonate), producing different final architectures from the same building block."],
+["Biosynthesis","Hard","A tissue shows elevated Malonyl CoA but normal Mevalonic acid — which biosynthetic pathway is most active?","The acetate malonate pathway (toward fatty acids and lipids)."],
+["Biosynthesis","Hard","Isoprenoids and fatty acids are both downstream of Acetyl CoA — what distinguishes the immediate precursor of each?","Isoprenoids arise from mevalonic acid (mevalonate pathway), while fatty acids arise from Malonyl CoA (malonate pathway)."],
+["Fatty Acids","Hard","Why can a fully saturated fatty acid never show a cis or trans configuration?","Because cis/trans isomerism arises specifically around a C=C double bond, and saturated fatty acids have no double bonds (all single bonds)."],
+["Fatty Acids","Hard","An unsaturated fatty acid packs closely and has a high melting point, behaving like a saturated one — which double-bond configuration explains this?","A trans configuration, since trans bonds keep the chain relatively straight, allowing packing similar to saturated chains, unlike the kinked cis form."],
+["Fatty Acids","Hard","Why does repeated frying pose a greater concern than a single frying event, given the cis-to-trans conversion described?","Because the conversion depends on cumulative time and temperature, so repeated or prolonged frying increases the proportion of carcinogenic trans fats formed."],
+["Fatty Acids","Hard","Cod liver oil (liquid, animal) and cocoa butter (solid, plant) are named exceptions — what does this reveal about the saturated/unsaturated-to-physical-state rule?","The general rule is a strong tendency, not an absolute law — the degree of saturation and packing, not origin alone, ultimately governs physical state."],
+["Fatty Acids","Hard","A plant-derived oil is discovered to be solid at room temperature — what would you infer about its fatty acid saturation, using cocoa butter as a precedent?","It likely contains a higher proportion of saturated (or more tightly packing) fatty acids than typical plant oils, similar to cocoa butter."],
+["Fatty Acids","Hard","Explain why soap's cleaning action requires BOTH a hydrophobic tail and a hydrophilic head, not either alone.","A tail-only molecule would dissolve oily dirt but never mix into water for rinsing, while a head-only molecule could not penetrate oily dirt at all; together they let the fatty acid bridge oil and water to emulsify and wash it away."],
+["Fatty Acids","Hard","Why would adding more double bonds (polyunsaturation) to a fatty acid chain lower its melting point even further than one double bond does?","Because each additional double bond introduces another kink, progressively reducing how closely the chains can pack and weakening intermolecular attractions."],
+["Fatty Acids","Hard","In a triglyceride's dehydration synthesis, if one fatty acid were replaced by a long-chain alcohol, why would the product not be a proper wax?","Because a wax requires a fatty acid esterified to a long-chain alcohol as its sole alcohol component, not a glycerol backbone still bearing two other fatty acids."],
+["Fatty Acids","Hard","Would a highly polyunsaturated plant oil be more or less prone to forming trans fats during frying than a monounsaturated oil?","More prone, since it has more C=C double bonds available for cis-to-trans isomerization under heat over time."],
+["Fatty Acids","Hard","Why is the carboxyl group (–COOH), not a hydroxyl group (–OH), the defining hydrophilic head of a fatty acid, even though glycerol's polarity comes from –OH groups?","Each molecule's polar character arises from its own characteristic functional group — the fatty acid's polarity comes from its terminal carboxyl group, distinguishing it from glycerol, an alcohol with multiple hydroxyls."],
+["Fatty Acids","Hard","Why does the fatty acid definition emphasize a 'long' hydrocarbon tail rather than any hydrocarbon chain?","A very short chain would not be sufficiently non-polar overall; chain length is what makes the tail's non-polar character dominate over the polar head, producing the amphipathic fatty acid."],
+["Waxes","Hard","A tablet coating needs extreme hardness, a high melting point, and non-digestibility — which named wax best fits, and on which two linked properties does the choice rest?","Carnauba wax — it is described as 'very hard' AND specifically used in tablet coating, both properties explicitly linked to it in the source."],
+["Waxes","Hard","Ozokerite and paraffin wax (mineral) and beeswax (animal) are all usable in ointments — what does this overlap suggest about how waxes are functionally chosen for formulation?","Functional selection for ointment bases (hardness, stability, water resistance) can draw from any wax origin — plant, animal, or mineral — since the choice depends on properties rather than biological source."],
+["Waxes","Hard","Spermaceti was replaced by synthetic cetyl esters, and cetyl alcohol is the wax-defining alcohol described elsewhere — what does this imply about spermaceti's original chemistry?","It implies spermaceti was itself chemically a cetyl-ester-type wax, so synthetic cetyl esters could closely replicate its properties."],
+["Waxes","Hard","Beeswax contains myricyl palmitate — based on the general fatty-acid/long-chain-alcohol wax structure, what are its two likely components?","Palmitic acid (a fatty acid) esterified with myricyl alcohol (a long-chain alcohol)."],
+["Waxes","Hard","A newly discovered plant wax is soft and melts at a low temperature — does it fit the general wax characteristics described in this topic?","No — it contradicts the defining characteristics that waxes are harder, more brittle, and have higher melting points than fats."],
+["Waxes","Hard","Plant waxes (protecting leaf/fruit epidermis) and insect waxes (building honeycombs) rely on the same underlying property for very different purposes — what is it?","Resistance to water/moisture and structural stability from the wax's hard, hydrolysis-resistant ester structure."],
+["Waxes","Hard","Why would it be chemically inconsistent to describe a wax as forming by dehydration synthesis of glycerol with three fatty acids?","That description defines a triglyceride (fixed oil/fat), not a wax; a wax is an ester of a fatty acid with a long-chain alcohol other than glycerol."],
+["Waxes","Hard","Given waxes resist hydrolysis and oxidation more than fixed oils, what storage advantage would a wax-based cosmetic have over a fixed-oil-based one?","The wax-based product would be less prone to rancidity/degradation over time, giving it a longer stable shelf life."],
+["Waxes","Hard","Carnauba (plant), beeswax (animal), and paraffin wax (mineral) are all grouped as 'waxes' despite radically different origins — what unifies them?","They all share the characteristic wax properties — hardness, high melting point, water insolubility/organic solvent solubility — regardless of plant, animal, or mineral origin."],
+["Waxes","Hard","Why might a formulator avoid a fixed oil in a lipstick but readily use carnauba or candelilla wax?","A lipstick needs a firm, higher-melting structure that holds shape and resists smudging/rancidity — properties waxes provide but soft, rancidity-prone fixed oils do not."],
+["Waxes","Hard","Beeswax (animal) and candelilla wax (plant) are both used in cosmetics — what does this indicate about how formulators select waxes?","Selection is driven by the functional wax properties needed (hardness, texture, stability) rather than strictly by biological origin."],
+["Comparison","Hard","Sample A hydrolyzes quickly and has a lower melting point; Sample B resists hydrolysis and has a higher melting point — which is the fixed oil and which the wax?","Sample A is more likely the fixed oil (prone to rancidity, lower melting point) and Sample B the wax (resistant to hydrolysis, higher melting point), matching their defining comparative properties."],
+["Comparison","Hard","If a lipid is esterified to glycerol, can it also be classified as a wax by this topic's definition?","No — waxes are defined as esters with long-chain alcohols other than glycerol, so glycerol esterification places it in the fixed oil/fat category."],
+["Comparison","Hard","Why do 'lower melting point' and 'more prone to rancidity' correlate when comparing fixed oils to waxes, rather than being unrelated?","Both trace to the same structural cause — the glycerol-ester (triglyceride) structure and typical unsaturation pack less tightly and react more readily, lowering melting point and raising susceptibility to hydrolysis/oxidation."],
+["Comparison","Hard","A synthetic lipid has a fixed-oil-like fatty acid composition but is esterified to a long-chain alcohol instead of glycerol — would you predict wax-like or oil-like melting point/rancidity behavior?","Wax-like (higher melting point, less prone to rancidity), since the alcohol component (long-chain alcohol vs. glycerol) is the chief structural driver of these comparative properties."],
+["Comparison","Hard","The uses table separates fixed oils (nutritional/pharmaceutical/industrial) from waxes (cosmetic/coatings/stiffening) — is this split absolute, given oils and waxes appear together in ointment formulation?","It is overlapping, not absolute — both appear together in pharmaceutical ointments (oils as bases, waxes as consistency modifiers/coatings), even though their typical uses differ as summarized."]
+];
+
+const fcCategories = ['All','Basics','Biosynthesis','Fatty Acids','Waxes','Comparison','Applications'];
+const fcLevels = ['Easy','Medium','Hard'];
+let fcActiveCat = 'All';
+let fcActiveLevel = 'Easy';
+
+const fcLevelRow = document.getElementById('fcLevelRow');
+const fcLevelLabel = document.createElement('span');
+fcLevelLabel.className = 'level-label';
+fcLevelLabel.textContent = 'Difficulty:';
+fcLevelRow.appendChild(fcLevelLabel);
+fcLevels.forEach(lvl=>{
+  const count = flashcards.filter(f=>f[1]===lvl).length;
+  const b = document.createElement('button');
+  b.className = 'level-btn' + (lvl===fcActiveLevel ? ' active' : '');
+  b.dataset.level = lvl;
+  b.innerHTML = lvl + '<span class="lvl-count">(' + count + ')</span>';
+  b.addEventListener('click', ()=>{
+    fcActiveLevel = lvl;
+    document.querySelectorAll('#fcLevelRow .level-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    renderFlashcards();
+  });
+  fcLevelRow.appendChild(b);
+});
+
+const fcControls = document.getElementById('fcControls');
+fcCategories.forEach(cat=>{
+  const b = document.createElement('button');
+  b.className='fc-filter'+(cat==='All'?' active':'');
+  b.textContent=cat;
+  b.addEventListener('click', ()=>{
+    fcActiveCat = cat;
+    document.querySelectorAll('.fc-filter').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    renderFlashcards();
+  });
+  fcControls.appendChild(b);
+});
+const shuffleBtn = document.createElement('button');
+shuffleBtn.className='fc-shuffle'; shuffleBtn.textContent='Shuffle deck';
+shuffleBtn.addEventListener('click', ()=>{ shuffleArr(flashcards); renderFlashcards(); });
+fcControls.appendChild(shuffleBtn);
+const fcCount = document.createElement('span');
+fcCount.className='fc-count';
+fcControls.appendChild(fcCount);
+
+function shuffleArr(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+}
+const fcGrid = document.getElementById('fcGrid');
+function renderFlashcards(){
+  fcGrid.innerHTML='';
+  const list = flashcards.filter(f=> f[1]===fcActiveLevel && (fcActiveCat==='All' || f[0]===fcActiveCat) );
+  fcCount.textContent = list.length + ' cards';
+  list.forEach(f=>{
+    const card = document.createElement('div');
+    card.className='fc-card';
+    card.innerHTML = '<div class="fc-inner">'+
+      '<div class="fc-face fc-front"><div class="tag">'+f[0]+' &middot; '+f[1]+'</div><h4>'+f[2]+'</h4><div class="fc-hint">tap to flip</div></div>'+
+      '<div class="fc-face fc-back">'+f[3]+'</div>'+
+      '</div>';
+    card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+    fcGrid.appendChild(card);
+  });
+}
+renderFlashcards();
+
+/* ===================== QUIZ DATA ===================== */
+// Each entry: [difficulty, question, answer, [distractor1, distractor2, distractor3]]
+const quizRaw = [
+["Easy","What are lipids?","Non-polar, water-insoluble biomolecules that include fats, fixed oils, waxes, and related compounds.",["Water-soluble proteins","Chains of amino acids","Nucleic acid polymers"]],
+["Easy","Lipids are insoluble in water because they are chemically —?","Non-polar.",["Highly polar","Ionic","Acidic"]],
+["Easy","Name the four groups of compounds included under lipids.","Fats, fixed oils, waxes, and related compounds.",["Sugars, starches, and celluloses","Amino acids, peptides, and proteins","Nucleotides, nucleosides, and bases"]],
+["Easy","In pharmacognosy, lipids are classified according to their —?","Origin (plant and animal).",["Molecular weight only","Color","Taste"]],
+["Easy","Fixed oils are mostly obtained from which source?","Plant sources.",["Animal sources","Mineral sources","Marine sources only"]],
+["Easy","Fats are mostly obtained from which source?","Animal sources.",["Plant sources","Mineral sources","Insect sources only"]],
+["Easy","Name one pharmaceutical excipient use of lipids.","Ointments and suppositories.",["Vaccines","Antibiotics","Anesthetics"]],
+["Easy","Lipids are used nutritionally as —?","Nutritional supplements.",["Antacids","Antihistamines","Diuretics"]],
+["Easy","Give one industrial use of lipids.","Soaps and cosmetics.",["Batteries","Textile dyeing only","Glassmaking"]],
+["Easy","Lipids serve as raw material for which chemical derivatives?","Fatty acid derivatives.",["Amino acid derivatives","Nucleotide derivatives","Carbohydrate derivatives"]],
+["Easy","Sesame oil is used pharmaceutically as a vehicle for —?","Intramuscular injections.",["Oral tablets","Eye drops","Nasal sprays"]],
+["Easy","Castor oil is pharmaceutically used as a —?","Laxative.",["Antiseptic","Antipyretic","Vaccine adjuvant"]],
+["Easy","Fatty acid biosynthesis begins from the combination of —?","Acetate units.",["Amino acid units","Glucose units","Nucleotide units"]],
+["Easy","What does glycolysis produce?","Pyruvate.",["Acetyl CoA","Mevalonic acid","Squalene"]],
+["Easy","Pyruvate is converted into —?","Acetyl CoA.",["Glycerol","Malonyl CoA","Isoprenoids"]],
+["Easy","Acetyl CoA splits into which two pathways?","The acetate mevalonate pathway and the acetate malonate pathway.",["The glycolysis and Krebs pathways","The urea and citric acid pathways","The pentose and shikimate pathways"]],
+["Easy","The acetate mevalonate pathway produces —?","Mevalonic acid.",["Malonyl CoA","Fatty acids","Triglycerides"]],
+["Easy","Mevalonic acid is converted into —?","Isoprenoids.",["Fatty acids","Malonyl CoA","Waxes"]],
+["Easy","Isoprenoids lead to the formation of —?","Squalene.",["Malonyl CoA","Glycerol","Fatty acids"]],
+["Easy","Squalene is the precursor of —?","Steroids and terpenes.",["Fatty acids and waxes","Glycerol and cetyl alcohol","Malonyl CoA and mevalonic acid"]],
+["Easy","The acetate malonate pathway produces —?","Malonyl CoA.",["Mevalonic acid","Squalene","Isoprenoids"]],
+["Easy","Malonyl CoA leads to the formation of —?","Fatty acids.",["Steroids","Terpenes","Squalene"]],
+["Easy","Glycerol is a type of —?","Alcohol with a hydroxyl group on each of its three carbons.",["Carboxylic acid","Sugar","Amino acid"]],
+["Easy","A triglyceride is formed from glycerol and how many fatty acids?","Three fatty acids.",["One fatty acid","Two fatty acids","Four fatty acids"]],
+["Easy","Glycerol and fatty acids join by which reaction?","Dehydration synthesis.",["Hydrolysis","Oxidation","Reduction"]],
+["Easy","The tail of a fatty acid is described as —?","A long hydrocarbon chain that is hydrophobic.",["A carboxyl group that is hydrophilic","A hydroxyl-bearing ring","A nitrogen-containing chain"]],
+["Easy","The head of a fatty acid is described as —?","A carboxyl group that is hydrophilic.",["A long hydrocarbon chain","A glycerol backbone","A sterol ring"]],
+["Easy","Fatty acids are the main component of which cleaning product?","Soap.",["Bleach","Alcohol sanitizer","Detergent enzyme"]],
+["Easy","Saturated fatty acids have what kind of bonds between their carbons?","All single bonds.",["All double bonds","All triple bonds","No bonds at all"]],
+["Easy","Saturated fats are mostly derived from —?","Animal sources.",["Plant sources","Mineral sources","Marine algae"]],
+["Easy","Which oil is a liquid exception among saturated fats?","Cod liver oil.",["Olive oil","Castor oil","Coconut oil"]],
+["Easy","Unsaturated fatty acids contain how many double bonds, at minimum?","One or more.",["None","Exactly three","Exactly five"]],
+["Easy","A double bond in an unsaturated fatty acid causes a —?","Bend (kink) in the molecule.",["Straight, rigid chain","Extra hydroxyl group","Loss of the carboxyl head"]],
+["Easy","Unsaturated oils are typically — at room temperature?","Liquid.",["Solid","Gaseous","Crystalline"]],
+["Easy","Which fat is a solid exception among unsaturated fats?","Cocoa butter.",["Sesame oil","Sunflower oil","Fish oil"]],
+["Easy","In a cis bond, the two hydrocarbon pieces are on —?","The same side of the molecule.",["Opposite sides of the molecule","Different molecules entirely","No defined side"]],
+["Easy","In a trans bond, the two hydrocarbon pieces are on —?","Opposite sides of the molecule.",["The same side of the molecule","Both removed","Replaced by hydrogen"]],
+["Easy","Naturally occurring vegetable oils mostly contain which bond type?","Cis bonds.",["Trans bonds","Ionic bonds","Peptide bonds"]],
+["Easy","Waxes are esters of long-chain fatty acids with —?","Long-chain alcohols (not glycerol).",["Glycerol","Amino acids","Sugars"]],
+["Easy","Compared to fixed oils, waxes are more resistant to —?","Hydrolysis and oxidation.",["Heat only","Light only","Freezing only"]],
+["Easy","Compared to fats, waxes are — in texture?","Harder and more brittle.",["Softer and more flexible","Identical in texture","Liquid at room temperature"]],
+["Easy","Waxes generally have — melting points than fats?","Higher.",["Lower","The same","Undefined"]],
+["Easy","Regarding solubility, waxes are —?","Insoluble in water, soluble in organic solvents.",["Soluble in water only","Insoluble in all solvents","Soluble equally in water and oil"]],
+["Easy","In plants, waxes are generally found covering —?","The epidermis of leaves and fruits.",["The vascular tissue","The plant roots","The seed embryo"]],
+["Easy","The main function of plant waxes is to —?","Prevent the loss of water.",["Attract pollinators","Store genetic material","Absorb sunlight"]],
+["Easy","Waxes are also produced by which insects?","Bees and wasps (honeycombs).",["Butterflies and moths","Ants and termites","Beetles and crickets"]],
+["Easy","Carnauba wax is obtained from which plant?","Copernicia prunifera.",["Euphorbia species","Apis mellifera","Petroleum residues"]],
+["Easy","Carnauba wax, being very hard, is used in —?","Tablet coating and polishes.",["Injectable vehicles","Laxative preparations","Intramuscular injections"]],
+["Easy","Candelilla wax is obtained from which plant genus?","Euphorbia species.",["Copernicia prunifera","Apis mellifera","Petroleum residues"]],
+["Easy","Candelilla wax is used in —?","Cosmetics and adhesives.",["Tablet coating only","Injection vehicles","Laxatives"]],
+["Easy","Beeswax is also known by which names?","Cera Alba / Cera Flava.",["Cera Mellifera","Cetyl Ester Wax","Spermaceti Alba"]],
+["Easy","Beeswax is obtained from which insect?","Apis mellifera.",["Copernicia prunifera","Sperm whale","Euphorbia species"]],
+["Easy","A key chemical component of beeswax is —?","Myricyl palmitate.",["Cetyl alcohol","Malonyl CoA","Squalene"]],
+["Easy","Spermaceti is obtained from —?","The head cavity of the sperm whale.",["The epidermis of leaves","Petroleum residues","Beehives"]],
+["Easy","Chemically, fixed oils/fats are classified as —?","Triglycerides.",["Esters of fatty acids and long-chain alcohols","Amino acid polymers","Nucleic acids"]],
+["Easy","Chemically, waxes are classified as —?","Esters of fatty acids and long-chain alcohols.",["Triglycerides","Phospholipids","Steroids"]],
+["Easy","In texture, fixed oils are typically —?","Liquid or semi-solid.",["Solid and brittle","Gaseous","Crystalline like salt"]],
+["Easy","Regarding rancidity, fixed oils are —?","Prone to rancidity.",["Never prone to rancidity","As resistant as waxes","Immune to oxidation"]],
+["Easy","The chief chemical difference between fixed oils/fats and waxes is —?","The type of alcohol involved.",["The type of fatty acid involved","The presence of carbon atoms","The presence of oxygen atoms"]],
+["Easy","Cetyl alcohol's chemical formula is —?","CH3(CH2)15OH.",["C3H8O3","C2H5OH","CH3OH"]],
+["Medium","Why are lipids classified separately from carbohydrates and proteins?","Because they are non-polar and water-insoluble, unlike the polar, water-soluble carbohydrates and proteins.",["Because they contain nitrogen","Because they are always crystalline solids","Because they cannot be digested"]],
+["Medium","What distinguishes a fixed oil from a volatile (essential) oil in composition?","Fixed oils are non-volatile triglycerides of fatty acids, unlike volatile essential oils.",["Fixed oils evaporate on standing","Fixed oils contain no fatty acids","Fixed oils are always solid"]],
+["Medium","How does the origin of a lipid (plant vs. animal) generally predict its degree of saturation?","Animal lipids are generally saturated (fats), while plant lipids are generally unsaturated (fixed oils).",["Animal lipids are always unsaturated","Plant lipids are always saturated","Origin has no relation to saturation"]],
+["Medium","Why might a lipid-based excipient suit a suppository better than a water-based one?","Because lipids are non-polar and can melt at body temperature while remaining solid at room temperature, releasing the drug appropriately.",["Because lipids dissolve instantly in water","Because lipids are always transparent","Because lipids never melt"]],
+["Medium","Why is olive oil suitable as a pharmaceutical emollient?","As an unsaturated fixed oil it stays semi-liquid and softens/soothes the skin as a nutritive.",["Because it hardens skin","Because it is a mineral wax","Because it is a saturated animal fat"]],
+["Medium","Why are coconut and peanut oils suitable as ointment bases?","They are fixed oils with a consistency and stability suited to topical bases.",["Because they are waxes","Because they are proteins","Because they are volatile"]],
+["Medium","How does a wax modify an ointment's consistency compared to a fixed oil alone?","Waxes are harder, higher-melting, and more resistant to hydrolysis, so they stiffen and stabilize the ointment.",["Waxes make ointments more liquid","Waxes dissolve the ointment in water","Waxes lower the melting point"]],
+["Medium","Why is sesame oil chosen as an injectable vehicle rather than an aqueous one?","As a non-polar fixed oil, it can dissolve lipophilic drugs and give a depot/sustained-release effect intramuscularly.",["Because it is water-soluble","Because it is a wax","Because it evaporates quickly"]],
+["Medium","Beyond tablet coating, why is carnauba wax valued industrially?","Because it is very hard with a high melting point, which also makes it useful in polishes.",["Because it is very soft","Because it dissolves in water","Because it is edible only"]],
+["Medium","Why would castor oil's action as a laxative differ from a typical nutritive fixed oil's action?","Its particular fatty acid composition gives it a specific bowel-stimulating effect not shared by every fixed oil.",["Because it is a mineral wax","Because it is highly saturated","Because it is insoluble in the gut"]],
+["Medium","Why do both fatty acids and steroids/terpenes trace back to the same starting molecule?","Because both pathways branch from Acetyl CoA, common to the mevalonate and malonate routes.",["Because they both start from glycerol","Because they both start from glucose directly","Because they are unrelated pathways"]],
+["Medium","What is the key branch point where fatty acid and steroid biosynthesis diverge?","Acetyl CoA, which splits into the acetate mevalonate and acetate malonate pathways.",["Pyruvate","Glycerol","Squalene"]],
+["Medium","Why does the malonate pathway matter specifically for lipid (fat and wax) formation?","Because it produces Malonyl CoA, which leads to fatty acids, the building blocks of fats and waxes.",["Because it produces mevalonic acid","Because it produces isoprenoids","Because it produces squalene"]],
+["Medium","Why does the mevalonate pathway not directly yield fatty acids?","Because it leads instead to isoprenoids, squalene, and ultimately steroids and terpenes.",["Because it lacks Acetyl CoA","Because it produces glycerol only","Because it stops at pyruvate"]],
+["Medium","What links glycolysis to fatty acid biosynthesis?","Glycolysis produces pyruvate, which converts to Acetyl CoA, entering the malonate pathway toward fatty acids.",["Glycolysis directly yields fatty acids","Glycolysis produces mevalonic acid directly","Glycolysis has no link to lipid synthesis"]],
+["Medium","Why is Acetyl CoA described as a metabolic crossroads in lipid biosynthesis?","Because from Acetyl CoA, metabolism can proceed toward steroids/terpenes (mevalonate) or fatty acids/lipids (malonate).",["Because it only leads to one product","Because it is the final product of lipid metabolism","Because it cannot be converted further"]],
+["Medium","Why does forming a triglyceride release three water molecules?","Because each of the three fatty acids forms an ester bond with one hydroxyl group of glycerol via dehydration synthesis, releasing one water per bond.",["Because glycerol has six hydroxyl groups","Because water is a byproduct of oxidation only","Because each fatty acid releases three water molecules"]],
+["Medium","Why can a fatty acid act as an emulsifier in soap?","Because its hydrophobic tail dissolves in oily dirt while its hydrophilic head dissolves in water, bridging the two.",["Because it is entirely hydrophobic","Because it is entirely hydrophilic","Because it has no charge anywhere"]],
+["Medium","Why are saturated fatty acids able to pack closely together?","Because their straight chains (all single bonds, maximum hydrogens) allow tight, regular packing.",["Because they have kinked chains","Because they contain double bonds","Because they are branched"]],
+["Medium","Why does a double bond lower the packing efficiency of a fatty acid chain?","Because it introduces a bend (kink) that prevents the chains from lying flat and close together.",["Because it adds extra hydrogens","Because it removes the carboxyl head","Because it shortens the chain"]],
+["Medium","Cod liver oil is an exception because it is an animal-derived fat that is —?","Liquid at room temperature.",["Solid at room temperature","A mineral wax","A plant-derived oil"]],
+["Medium","Cocoa butter is an exception because it is a plant-derived fat that is —?","Solid at room temperature.",["Liquid at room temperature","A mineral wax","An animal-derived oil"]],
+["Medium","Why does the cis/trans distinction matter for the shape of an unsaturated fatty acid?","In the cis form the chain kinks (pieces on the same side), while the trans form keeps the chain relatively straight (pieces on opposite sides).",["Cis and trans differ in the number of carbons","Cis has no double bond","Trans has an extra oxygen"]],
+["Medium","Why does frying convert some cis bonds into trans bonds?","Because time and temperature during frying provide the energy needed to isomerize the double bond configuration.",["Because frying adds hydrogen atoms permanently","Because frying removes the double bond entirely","Because frying converts oils into waxes"]],
+["Medium","Why are trans fats formed during frying considered a health concern?","Because they are carcinogenic.",["Because they are essential nutrients","Because they are antioxidants","Because they are water-soluble vitamins"]],
+["Medium","If a vegetable oil is repeatedly used for deep frying, what change would you expect in its bond ratio?","An increase in trans bonds relative to the original mostly-cis composition.",["No change at all","A complete loss of all double bonds","Conversion into a saturated wax"]],
+["Medium","Why do unsaturated oils fail to pack as closely as saturated fats?","Because the double-bond-induced kink disrupts the straight, regular alignment needed for close packing.",["Because unsaturated oils have shorter tails","Because unsaturated oils have charged heads","Because unsaturated oils lack a carboxyl group"]],
+["Medium","Why is a fatty acid's head hydrophilic while its tail is hydrophobic?","Because the carboxyl group can interact with water (polar), while the long hydrocarbon chain cannot (non-polar).",["Because the head has no oxygen","Because the tail contains a hydroxyl group","Because both ends are non-polar"]],
+["Medium","Between a saturated and unsaturated fatty acid of similar length, which has the higher melting point, and why?","The saturated one, because its straight chain allows closer packing and stronger intermolecular forces.",["The unsaturated one, because kinks increase packing","Both melt at the same temperature always","Melting point is unrelated to saturation"]],
+["Medium","Why does having one or more double bonds make a fatty acid 'unsaturated' rather than 'saturated'?","Because saturation refers to being fully bonded to hydrogen (single bonds only); a double bond means fewer hydrogens are attached.",["Because double bonds add more hydrogens","Because saturation refers to water content","Because double bonds remove the carboxyl head"]],
+["Medium","Why are waxes not digested like triglycerides?","Because they are esters of fatty acids with long-chain alcohols (not glycerol), a structure the enzymes for triglycerides cannot break down.",["Because they contain no fatty acids","Because they are proteins","Because they are water-soluble"]],
+["Medium","Why are waxes more resistant to hydrolysis than fixed oils?","Because their ester bond to a long-chain alcohol (instead of glycerol) is more chemically stable.",["Because they contain no ester bonds","Because they are more polar","Because they contain glycerol"]],
+["Medium","Why do plants coat their leaf and fruit epidermis with wax rather than fixed oil?","Wax's higher resistance to water loss, from its stable hydrophobic structure, makes it a better protective barrier.",["Because fixed oils repel insects better","Because fixed oils are more water-soluble","Because wax is edible for the plant"]],
+["Medium","Why do bees and wasps use wax rather than a fixed oil to build honeycombs?","Wax's hardness, higher melting point, and resistance to hydrolysis/oxidation make it a stable structural material.",["Because wax is more liquid than oil","Because wax dissolves easily in water","Because wax has a lower melting point than oil"]],
+["Medium","Why is spermaceti now largely replaced by synthetic cetyl esters in pharmacy?","Likely due to sourcing concerns with a natural whale-derived product, prompting synthetic cetyl-based alternatives with similar properties.",["Because cetyl esters are more expensive","Because spermaceti is now a fixed oil","Because spermaceti is now digestible"]],
+["Medium","Why are paraffin wax and ozokerite, though mineral in origin, still classified functionally as waxes?","Because they share the physical wax-like properties (hardness, high melting point, water resistance) used similarly in ointment bases.",["Because they contain glycerol","Because they are esters of fatty acids","Because they are digested like fats"]],
+["Medium","Why would carnauba wax be preferred over beeswax for a very hard tablet coating?","Because carnauba wax is notably harder, matching the need for a rigid protective coat.",["Because carnauba wax is softer","Because carnauba wax is a fixed oil","Because carnauba wax is edible only"]],
+["Medium","Why is candelilla wax suited for adhesives, unlike a fixed oil?","Its hardness, stability, and resistance to hydrolysis give it a tacky yet stable consistency unlike a liquid oil.",["Because it is a triglyceride","Because it is highly liquid","Because it dissolves readily in water"]],
+["Medium","What property connects beeswax's myricyl palmitate content to its cosmetic use?","Myricyl palmitate is a long-chain wax ester that provides the firm, stable texture cosmetics need.",["It is a water-soluble sugar","It is a volatile terpene","It is an amino acid"]],
+["Medium","Why is ozokerite classified alongside paraffin wax as a mineral wax rather than with carnauba or beeswax?","Because it shares their origin from non-biological, petroleum-based sources rather than plant or animal biosynthesis.",["Because it is digested like triglycerides","Because it comes from insects","Because it is derived from plant epidermis"]],
+["Medium","Why does a higher melting point make waxes better suited than fats for tablet coatings and polishes?","Because they remain solid and stable under normal handling and storage temperatures, unlike lower-melting fats.",["Because it makes them liquid at room temperature","Because it makes them easier to digest","Because it lowers their resistance to hydrolysis"]],
+["Medium","Why does the insolubility of waxes in water, plus solubility in organic solvents, matter for cosmetic formulation?","It allows waxes to form stable, water-resistant films (e.g., in lipsticks/creams) while still being processable with organic solvents.",["It makes them dissolve completely in water-based creams","It makes them impossible to formulate into cosmetics","It means they evaporate quickly"]],
+["Medium","Why can a wax's greater resistance to hydrolysis and oxidation give a cosmetic product a longer shelf life?","Because the wax resists the breakdown reactions (hydrolysis/oxidation) that would otherwise cause rancidity or degradation over time.",["Because waxes evaporate before they can degrade","Because waxes are less stable than oils","Because resistance to hydrolysis speeds up degradation"]],
+["Medium","Beeswax and spermaceti are both animal waxes from very different sources — what does this show about the 'animal wax' classification?","The classification is based on animal origin (insect vs. marine mammal), not on a shared specific source organism.",["All animal waxes come from insects","All animal waxes come from whales","Animal waxes cannot be classified by origin"]],
+["Medium","Why do fixed oils go rancid more easily than waxes?","Because fixed oils (triglycerides) are more chemically reactive and prone to hydrolysis/oxidation than the more stable ester bonds in waxes.",["Because fixed oils contain no fatty acids","Because waxes are triglycerides too","Because fixed oils are solid at room temperature"]],
+["Medium","Why do fixed oils generally have a lower melting point than waxes?","Their glycerol-based, often-unsaturated triglyceride structure packs less tightly than the long-chain alcohol esters in waxes.",["Because fixed oils have more double bonds only in waxes","Because waxes are always liquid","Because fixed oils have higher molecular weight alcohols"]],
+["Medium","What underlying property explains why fixed oils suit nutrition/pharmacy/industry while waxes suit cosmetics/coatings?","Fixed oils' digestibility and lower melting point suit ingestion and drug delivery, while waxes' hardness and indigestibility suit protective/cosmetic roles.",["Waxes are more nutritious than fixed oils","Fixed oils cannot be used industrially","Waxes are digested more easily than fixed oils"]],
+["Medium","If a substance is an ester of a fatty acid with a long-chain alcohol (not glycerol), is it a fixed oil or a wax?","A wax.",["A fixed oil","A protein","A carbohydrate"]],
+["Medium","If a substance is a triglyceride, is it more likely a fixed oil/fat or a wax?","A fixed oil/fat.",["A wax","A steroid","A terpene"]],
+["Medium","Why is the type of alcohol (glycerol vs. long-chain alcohol) the 'chief difference' between fixed oils and waxes, rather than the fatty acid?","Because both classes use fatty acids, but the alcohol they are esterified to is what structurally distinguishes them.",["Because fixed oils contain no fatty acids","Because waxes contain no alcohol at all","Because the fatty acid in waxes is always different"]],
+["Hard","A compound is non-polar and water-insoluble, but is a protein-based enzyme cofactor — is it a lipid by this topic's classification?","No — lipids must fall within fats, fixed oils, waxes, or related compounds; a protein-based cofactor is not a lipid despite being non-polar.",["Yes, because non-polarity alone defines a lipid","Yes, because all cofactors are lipids","Only if it also contains glycerol"]],
+["Hard","Which single physicochemical property most fundamentally unifies fats, fixed oils, and waxes despite their structural differences?","They are all non-polar and water-insoluble.",["They are all triglycerides","They are all esterified with glycerol","They are all solids at room temperature"]],
+["Hard","Why would a wax be unsuitable as an injectable oily vehicle, even though it is lipophilic like a fixed oil?","Because waxes are hard, high-melting, and resistant to breakdown, unsuitable for remaining liquid and absorbable the way a fixed oil does.",["Because waxes are water-soluble","Because waxes are digested faster than oils","Because waxes have a lower melting point than oils"]],
+["Hard","A formulation must both stiffen an ointment AND coat a tablet with high hardness — which lipid category fits both roles better than a fixed oil, and why?","A wax, because its hardness, high melting point, and resistance to hydrolysis/oxidation suit both stiffening and hard coating, unlike lower-melting, more reactive fixed oils.",["A fixed oil, because it is more nutritious","A protein, because it is more stable","A carbohydrate, because it dissolves in water"]],
+["Hard","Castor oil (laxative) and olive oil (emollient/nutritive) are both fixed oils used very differently — what does this show about classifying a lipid's therapeutic use?","A shared chemical class (fixed oil/triglyceride) does not determine a single biological effect; the specific fatty acid composition drives the distinct pharmacological action.",["All fixed oils must have the same effect","Their effects are due to being waxes","Their effects are unrelated to fatty acid composition"]],
+["Hard","Why are coconut, peanut, and olive oils used as ointment bases or nutritives, while beeswax is used only to modify consistency?","The fixed oils are relatively soft, spreadable triglycerides suited as a base, whereas beeswax's hardness and high melting point suit it only for stiffening, not as a primary base.",["Because beeswax is more liquid than the oils","Because beeswax is also a triglyceride","Because the oils are harder than beeswax"]],
+["Hard","Trace the full pathway from glycolysis to a terpene, naming every intermediate in order.","Glycolysis → Pyruvate → Acetyl CoA → (acetate mevalonate pathway) → Mevalonic acid → Isoprenoids → Squalene → Terpenes.",["Glycolysis → Acetyl CoA → Malonyl CoA → Fatty acids → Terpenes","Glycolysis → Pyruvate → Malonyl CoA → Isoprenoids → Terpenes","Glycolysis → Squalene → Mevalonic acid → Pyruvate → Terpenes"]],
+["Hard","Trace the full pathway from glycolysis to a lipid (fat/wax), naming every intermediate in order.","Glycolysis → Pyruvate → Acetyl CoA → (acetate malonate pathway) → Malonyl CoA → Fatty acids → Lipids (fats and waxes).",["Glycolysis → Pyruvate → Mevalonic acid → Squalene → Lipids","Glycolysis → Acetyl CoA → Isoprenoids → Fatty acids → Lipids","Glycolysis → Malonyl CoA → Pyruvate → Acetyl CoA → Lipids"]],
+["Hard","If Acetyl CoA production were blocked, which two downstream product families would fail to form, and why?","Both steroids/terpenes and fatty acids/lipids, because Acetyl CoA is the shared entry point into both the mevalonate and malonate pathways.",["Only fatty acids would fail, since steroids come from glycerol","Only steroids would fail, since fatty acids come from pyruvate directly","Neither, since both pathways bypass Acetyl CoA"]],
+["Hard","Squalene is a later branch point toward steroids and terpenes — which earlier branch point separates the steroid/terpene fate from the fatty-acid/lipid fate?","Acetyl CoA, where the mevalonate pathway (toward squalene, steroids, terpenes) diverges from the malonate pathway (toward fatty acids and lipids).",["Pyruvate","Glycolysis","Malonyl CoA"]],
+["Hard","Why is it structurally logical that steroids and fatty acids both derive from acetate units despite very different final structures?","Both pathways begin by assembling two-carbon acetate/Acetyl CoA units, just via different downstream condensation routes (mevalonate vs. malonate), producing different final architectures from the same building block.",["Because they are chemically identical in the end","Because steroids contain no carbon from acetate","Because fatty acids are made from glycerol, not acetate"]],
+["Hard","A tissue shows elevated Malonyl CoA but normal Mevalonic acid — which biosynthetic pathway is most active?","The acetate malonate pathway (toward fatty acids and lipids).",["The acetate mevalonate pathway","Neither, since Malonyl CoA is unrelated to lipid synthesis","Both equally, since they share all intermediates"]],
+["Hard","Isoprenoids and fatty acids are both downstream of Acetyl CoA — what distinguishes the immediate precursor of each?","Isoprenoids arise from mevalonic acid (mevalonate pathway), while fatty acids arise from Malonyl CoA (malonate pathway).",["Both arise from the same precursor, squalene","Isoprenoids arise from Malonyl CoA and fatty acids from mevalonic acid","Both arise directly from pyruvate without Acetyl CoA"]],
+["Hard","Why can a fully saturated fatty acid never show a cis or trans configuration?","Because cis/trans isomerism arises specifically around a C=C double bond, and saturated fatty acids have no double bonds (all single bonds).",["Because saturated fatty acids have too many double bonds","Because cis/trans isomerism only applies to glycerol","Because saturated fatty acids are always liquid"]],
+["Hard","An unsaturated fatty acid packs closely and has a high melting point, behaving like a saturated one — which double-bond configuration explains this?","A trans configuration, since trans bonds keep the chain relatively straight, allowing packing similar to saturated chains, unlike the kinked cis form.",["A cis configuration, since cis bonds straighten the chain","Neither configuration affects packing","It must actually be fully saturated with no double bond"]],
+["Hard","Why does repeated frying pose a greater concern than a single frying event, given the cis-to-trans conversion described?","Because the conversion depends on cumulative time and temperature, so repeated or prolonged frying increases the proportion of carcinogenic trans fats formed.",["Because frying always converts all fat to trans instantly","Because repeated frying converts trans back to cis","Because frying has no cumulative effect on bond type"]],
+["Hard","Cod liver oil (liquid, animal) and cocoa butter (solid, plant) are named exceptions — what does this reveal about the saturated/unsaturated-to-physical-state rule?","The general rule is a strong tendency, not an absolute law — the degree of saturation and packing, not origin alone, ultimately governs physical state.",["The rule has no exceptions in practice","Origin alone always determines physical state","All animal fats are always liquid and all plant oils always solid"]],
+["Hard","A plant-derived oil is discovered to be solid at room temperature — what would you infer about its fatty acid saturation, using cocoa butter as a precedent?","It likely contains a higher proportion of saturated (or more tightly packing) fatty acids than typical plant oils, similar to cocoa butter.",["It must be entirely composed of double bonds","It must actually be a mineral wax","It cannot be a plant lipid at all"]],
+["Hard","Explain why soap's cleaning action requires BOTH a hydrophobic tail and a hydrophilic head, not either alone.","A tail-only molecule would dissolve oily dirt but never mix into water for rinsing, while a head-only molecule could not penetrate oily dirt at all; together they let the fatty acid bridge oil and water to emulsify and wash it away.",["A hydrophobic tail alone is sufficient for cleaning","A hydrophilic head alone is sufficient for cleaning","The head and tail perform the same function"]],
+["Hard","Why would adding more double bonds (polyunsaturation) to a fatty acid chain lower its melting point even further than one double bond does?","Because each additional double bond introduces another kink, progressively reducing how closely the chains can pack and weakening intermolecular attractions.",["Because more double bonds add more hydrogens","Because more double bonds make the chain straighter","Because melting point is unrelated to the number of kinks"]],
+["Hard","In a triglyceride's dehydration synthesis, if one fatty acid were replaced by a long-chain alcohol, why would the product not be a proper wax?","Because a wax requires a fatty acid esterified to a long-chain alcohol as its sole alcohol component, not a glycerol backbone still bearing two other fatty acids.",["It would be an identical triglyceride","It would become a carbohydrate","It would become a protein"]],
+["Hard","Would a highly polyunsaturated plant oil be more or less prone to forming trans fats during frying than a monounsaturated oil?","More prone, since it has more C=C double bonds available for cis-to-trans isomerization under heat over time.",["Less prone, since more double bonds prevent isomerization","Equally prone, since double bond number is irrelevant","Not prone at all, since polyunsaturated oils cannot isomerize"]],
+["Hard","Why is the carboxyl group (–COOH), not a hydroxyl group (–OH), the defining hydrophilic head of a fatty acid, even though glycerol's polarity comes from –OH groups?","Each molecule's polar character arises from its own characteristic functional group — the fatty acid's polarity comes from its terminal carboxyl group, distinguishing it from glycerol, an alcohol with multiple hydroxyls.",["Because carboxyl groups are non-polar","Because glycerol has no polar groups","Because fatty acids do not need a polar region"]],
+["Hard","Why does the fatty acid definition emphasize a 'long' hydrocarbon tail rather than any hydrocarbon chain?","A very short chain would not be sufficiently non-polar overall; chain length is what makes the tail's non-polar character dominate over the polar head, producing the amphipathic fatty acid.",["Because short chains are more hydrophobic than long ones","Because chain length has no effect on polarity","Because the head becomes hydrophobic with longer chains"]],
+["Hard","A tablet coating needs extreme hardness, a high melting point, and non-digestibility — which named wax best fits, and on which two linked properties does the choice rest?","Carnauba wax — it is described as 'very hard' AND specifically used in tablet coating, both properties explicitly linked to it in the source.",["Candelilla wax, chosen for its adhesive softness","Beeswax, chosen for its low melting point","Spermaceti, chosen for being liquid"]],
+["Hard","Ozokerite and paraffin wax (mineral) and beeswax (animal) are all usable in ointments — what does this overlap suggest about how waxes are functionally chosen for formulation?","Functional selection for ointment bases (hardness, stability, water resistance) can draw from any wax origin — plant, animal, or mineral — since the choice depends on properties rather than biological source.",["Only mineral waxes can ever be used in ointments","Only animal waxes can be used in ointment bases","Wax origin, not property, determines ointment suitability"]],
+["Hard","Spermaceti was replaced by synthetic cetyl esters, and cetyl alcohol is the wax-defining alcohol described elsewhere — what does this imply about spermaceti's original chemistry?","It implies spermaceti was itself chemically a cetyl-ester-type wax, so synthetic cetyl esters could closely replicate its properties.",["It implies spermaceti was actually a fixed oil","It implies spermaceti contained glycerol","It implies spermaceti had no ester bonds at all"]],
+["Hard","Beeswax contains myricyl palmitate — based on the general fatty-acid/long-chain-alcohol wax structure, what are its two likely components?","Palmitic acid (a fatty acid) esterified with myricyl alcohol (a long-chain alcohol).",["Glycerol esterified with three fatty acids","A protein bonded to a sugar","Two fatty acids joined directly with no alcohol"]],
+["Hard","A newly discovered plant wax is soft and melts at a low temperature — does it fit the general wax characteristics described in this topic?","No — it contradicts the defining characteristics that waxes are harder, more brittle, and have higher melting points than fats.",["Yes, since all plant products are automatically waxes","Yes, since melting point does not matter for wax classification","Yes, since softness is a defining wax trait"]],
+["Hard","Plant waxes (protecting leaf/fruit epidermis) and insect waxes (building honeycombs) rely on the same underlying property for very different purposes — what is it?","Resistance to water/moisture and structural stability from the wax's hard, hydrolysis-resistant ester structure.",["Their nutritional value","Their solubility in water","Their low melting point"]],
+["Hard","Why would it be chemically inconsistent to describe a wax as forming by dehydration synthesis of glycerol with three fatty acids?","That description defines a triglyceride (fixed oil/fat), not a wax; a wax is an ester of a fatty acid with a long-chain alcohol other than glycerol.",["Because dehydration synthesis never applies to lipids","Because waxes always use exactly three fatty acids","Because glycerol cannot react with any fatty acid"]],
+["Hard","Given waxes resist hydrolysis and oxidation more than fixed oils, what storage advantage would a wax-based cosmetic have over a fixed-oil-based one?","The wax-based product would be less prone to rancidity/degradation over time, giving it a longer stable shelf life.",["The wax-based product would spoil faster","Both would have identical shelf lives","Resistance to hydrolysis shortens shelf life"]],
+["Hard","Carnauba (plant), beeswax (animal), and paraffin wax (mineral) are all grouped as 'waxes' despite radically different origins — what unifies them?","They all share the characteristic wax properties — hardness, high melting point, water insolubility/organic solvent solubility — regardless of plant, animal, or mineral origin.",["They are all esters of glycerol","They are all digestible like triglycerides","They are all liquid at room temperature"]],
+["Hard","Why might a formulator avoid a fixed oil in a lipstick but readily use carnauba or candelilla wax?","A lipstick needs a firm, higher-melting structure that holds shape and resists smudging/rancidity — properties waxes provide but soft, rancidity-prone fixed oils do not.",["Because fixed oils are more resistant to hydrolysis","Because fixed oils have higher melting points than waxes","Because lipsticks require ingredients that are digestible"]],
+["Hard","Beeswax (animal) and candelilla wax (plant) are both used in cosmetics — what does this indicate about how formulators select waxes?","Selection is driven by the functional wax properties needed (hardness, texture, stability) rather than strictly by biological origin.",["Only animal waxes are permitted in cosmetics","Only plant waxes are permitted in cosmetics","Origin is the sole criterion for cosmetic wax selection"]],
+["Hard","Sample A hydrolyzes quickly and has a lower melting point; Sample B resists hydrolysis and has a higher melting point — which is the fixed oil and which the wax?","Sample A is more likely the fixed oil (prone to rancidity, lower melting point) and Sample B the wax (resistant to hydrolysis, higher melting point), matching their defining comparative properties.",["Sample A is the wax and Sample B the fixed oil","Both are equally likely to be either","Neither property distinguishes fixed oils from waxes"]],
+["Hard","If a lipid is esterified to glycerol, can it also be classified as a wax by this topic's definition?","No — waxes are defined as esters with long-chain alcohols other than glycerol, so glycerol esterification places it in the fixed oil/fat category.",["Yes, glycerol esters can also be waxes","Yes, if the fatty acid is very long","It depends only on melting point, not the alcohol"]],
+["Hard","Why do 'lower melting point' and 'more prone to rancidity' correlate when comparing fixed oils to waxes, rather than being unrelated?","Both trace to the same structural cause — the glycerol-ester (triglyceride) structure and typical unsaturation pack less tightly and react more readily, lowering melting point and raising susceptibility to hydrolysis/oxidation.",["They are entirely unrelated coincidences","Melting point determines nutritional value only","Rancidity is caused solely by refrigeration"]],
+["Hard","A synthetic lipid has a fixed-oil-like fatty acid composition but is esterified to a long-chain alcohol instead of glycerol — would you predict wax-like or oil-like melting point/rancidity behavior?","Wax-like (higher melting point, less prone to rancidity), since the alcohol component (long-chain alcohol vs. glycerol) is the chief structural driver of these comparative properties.",["It would resemble fixed oils exactly, in every property","Melting point and rancidity are unrelated to the alcohol component","It would behave like a carbohydrate"]],
+["Hard","The uses table separates fixed oils (nutritional/pharmaceutical/industrial) from waxes (cosmetic/coatings/stiffening) — is this split absolute, given oils and waxes appear together in ointment formulation?","It is overlapping, not absolute — both appear together in pharmaceutical ointments (oils as bases, waxes as consistency modifiers/coatings), even though their typical uses differ as summarized.",["It is completely absolute, with zero overlap","Only waxes are ever used pharmaceutically","Only fixed oils are ever used cosmetically"]]
+];
+
+const quizLevels = ['Easy','Medium','Hard'];
+let quizActiveLevel = 'Easy';
+let quizQuestions = [];
+let qIndex = 0, score = 0, answered = false;
+
+const quizCard = document.getElementById('quizCard');
+const quizProgress = document.getElementById('quizProgress');
+const quizScoreEl = document.getElementById('quizScore');
+const quizLevelRow = document.getElementById('quizLevelRow');
+
+const quizLevelLabel = document.createElement('span');
+quizLevelLabel.className = 'level-label';
+quizLevelLabel.textContent = 'Difficulty:';
+quizLevelRow.appendChild(quizLevelLabel);
+quizLevels.forEach(lvl=>{
+  const count = quizRaw.filter(q=>q[0]===lvl).length;
+  const b = document.createElement('button');
+  b.className = 'level-btn' + (lvl===quizActiveLevel ? ' active' : '');
+  b.dataset.level = lvl;
+  b.innerHTML = lvl + '<span class="lvl-count">(' + count + ')</span>';
+  b.addEventListener('click', ()=>{
+    quizActiveLevel = lvl;
+    document.querySelectorAll('#quizLevelRow .level-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    loadQuizLevel();
+  });
+  quizLevelRow.appendChild(b);
+});
+
+function loadQuizLevel(){
+  quizQuestions = quizRaw.filter(q=>q[0]===quizActiveLevel).map(q=>({q:q[1], a:q[2], d:q[3]}));
+  shuffleArr(quizQuestions);
+  qIndex = 0; score = 0;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  quizProgress.style.width = (qIndex/quizQuestions.length*100)+'%';
+  quizScoreEl.textContent = 'Score: '+score+' / '+quizQuestions.length;
+
+  if(qIndex>=quizQuestions.length){
+    quizCard.innerHTML = '<div class="quiz-end"><h3>'+score+' / '+quizQuestions.length+'</h3>'+
+      '<p>Quiz complete. Restart to get a fresh shuffle of questions and options.</p>'+
+      '<button class="quiz-restart" id="restartBtn">Restart quiz</button></div>';
+    quizProgress.style.width='100%';
+    document.getElementById('restartBtn').addEventListener('click', ()=>{
+      shuffleArr(quizQuestions); qIndex=0; score=0; renderQuestion();
+    });
+    return;
+  }
+
+  const item = quizQuestions[qIndex];
+  const opts = [item.a, ...item.d];
+  shuffleArr(opts);
+
+  quizCard.innerHTML = '<div class="quiz-q-num">Question '+(qIndex+1)+' of '+quizQuestions.length+'</div>'+
+    '<div class="quiz-q">'+item.q+'</div>'+
+    '<div class="quiz-options">'+opts.map(o=>'<button class="quiz-opt" data-opt="'+encodeURIComponent(o)+'">'+o+'</button>').join('')+'</div>'+
+    '<button class="quiz-next" id="nextBtn">Next question</button>';
+
+  quizCard.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(answered) return;
+      answered = true;
+      const chosen = decodeURIComponent(btn.dataset.opt);
+      quizCard.querySelectorAll('.quiz-opt').forEach(b=>{
+        b.setAttribute('disabled','true');
+        const val = decodeURIComponent(b.dataset.opt);
+        if(val===item.a) b.classList.add('correct');
+        else if(b===btn) b.classList.add('wrong');
+      });
+      if(chosen===item.a) score++;
+      quizScoreEl.textContent = 'Score: '+score+' / '+quizQuestions.length;
+      document.getElementById('nextBtn').style.display='inline-block';
+    });
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    qIndex++; renderQuestion();
+  });
+}
+loadQuizLevel();
+</script>
+</body>
+</html>
